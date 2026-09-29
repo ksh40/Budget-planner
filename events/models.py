@@ -24,6 +24,7 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     location = models.CharField(max_length=200)
     date = models.DateField()
     time = models.TimeField()

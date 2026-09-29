@@ -35,6 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # Organiser verification
     verification_document = models.FileField(upload_to='verification_docs/', blank=True, null=True)
+    verification_document_hash = models.CharField(max_length=64, blank=True)
     is_verified = models.BooleanField(default=False)
     verification_status = models.CharField(
         max_length=20,

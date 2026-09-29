@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+{% block title %}Set Up Your Profile – Evently{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <h2>Set Up Your Profile</h2>
+    <p class="form-subtitle">Create your homepage according to your preference.</p>
+
+    <div class="verification-steps">
+        <div class="step done">1. Account Created</div>
+        <div class="step active">2. Your Preferences</div>
+        <div class="step">3. Discover Events</div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Complete Profile</button>
+    </form>
+
+    <div class="form-footer">
+        <a href="{% url 'home' %}">Skip for now</a>
+    </div>
+</div>
+
+{% endblock %}

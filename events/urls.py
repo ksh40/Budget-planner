@@ -9,4 +9,9 @@ urlpatterns = [
     path('<int:pk>/delete/', views.event_delete_view, name='event_delete'),
     path('<int:pk>/update/', views.event_update_post_view, name='event_update_post'),
     path('dashboard/', views.organiser_dashboard_view, name='organiser_dashboard'),
+    path('admin/pending/', views.pending_events, name='pending_events'),
+    path('admin/<int:pk>/start-review/', views.start_review, name='start_review'),
+    path('admin/<int:pk>/add-evidence/', views.add_evidence, name='add_evidence'),
+    path('admin/<int:pk>/decide/', views.decide_event, name='decide_event'),
+    path('admin/<int:pk>/', views.event_admin_detail, name='event_admin_detail'),
 ]

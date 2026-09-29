@@ -21,10 +21,11 @@
                 <a href="{% url 'organiser_dashboard' %}">Dashboard</a>
                 <a href="{% url 'organiser_analytics' %}">Analytics</a>
             {% endif %}
-            {% if user.is_staff %}
+            {% if user.is_superuser %}
                 <a href="{% url 'admin_analytics' %}">Analytics</a>
                 <a href="{% url 'flag_list' %}">Flags</a>
-            {% endif %}
+                <a href="{% url 'pending_events' %}">Review</a>
+            {% endif %} 
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}" class="btn-nav">Logout</a>
         {% else %}
@@ -48,6 +49,7 @@
     <p>© 2026 Evently — Personalised Event Matching for Nairobi. Built with Django & PostgreSQL.</p>
 </footer>
 
+{% load static %}
 <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

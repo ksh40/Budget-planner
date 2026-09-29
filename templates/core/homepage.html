@@ -1,0 +1,77 @@
+{% extends 'home.html' %}
+{% block title %}Home – Evently{% endblock %}
+{% block content %}
+
+<div class="hero">
+    <h1>Discover Events That <span>Match You</span></h1>
+    <p>Personalised event recommendations based on your interests and location in Nairobi.</p>
+    <div class="hero-buttons">
+        <a href="{% url 'search' %}" class="btn btn-primary">Search Events</a>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-outline" style="color:white; border-color:white;">Sign Up Free</a>
+        {% endif %}
+    </div>
+</div>
+
+{% if user.is_authenticated and matched_events %}
+<div class="page-header">
+    <h2>Matched For You</h2>
+    <p>Based on your interests and location</p>
+</div>
+<div class="events-grid">
+    {% for event in matched_events %}
+    <div class="event-card">
+        <div class="event-banner">
+            {% if event.banner %}
+                <img src="{{ event.banner.url }}" alt="{{ event.title }}">
+            {% else %}
+                No Image
+            {% endif %}
+        </div>
+        <div class="event-body">
+            <span class="event-category">{{ event.category }}</span>
+            <h3><a href="/events/{{ event.pk }}/">{{ event.title }}</a></h3>
+            <div class="event-meta">
+                <span>📍 {{ event.location }}</span>
+                <span>📅 {{ event.date|date:"M d, Y" }}</span>
+            </div>
+            <a href="/events/{{ event.pk }}/" class="btn btn-primary btn-sm">View Event</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if other_events %}
+<div class="page-header">
+    <h2>{% if matched_events %}Other Events{% else %}Upcoming Events{% endif %}</h2>
+</div>
+<div class="events-grid">
+    {% for event in other_events %}
+    <div class="event-card">
+        <div class="event-banner">
+            {% if event.banner %}
+                <img src="{{ event.banner.url }}" alt="{{ event.title }}">
+            {% else %}
+                No Image
+            {% endif %}
+        </div>
+        <div class="event-body">
+            <span class="event-category">{{ event.category }}</span>
+            <h3><a href="/events/{{ event.pk }}/">{{ event.title }}</a></h3>
+            <div class="event-meta">
+                <span>📍 {{ event.location }}</span>
+                <span>📅 {{ event.date|date:"M d, Y" }}</span>
+            </div>
+            <a href="/events/{{ event.pk }}/" class="btn btn-primary btn-sm">View Event</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if not matched_events and not other_events %}
+    <p>No events available yet.</p>
+{% endif %}
+
+{% endblock %}

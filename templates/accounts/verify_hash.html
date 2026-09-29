@@ -1,0 +1,21 @@
+{% extends 'home.html' %}
+{% block content %}
+<div class="card">
+    <h2>Document Integrity Check — {{ user.username }}</h2>
+
+    {% if no_document %}
+        <p class="message warning">⚠️ This organiser has not uploaded a verification document yet.</p>
+    {% elif is_valid %}
+        <p class="message success">✅ Document is intact. Hash matches.</p>
+        <p><strong>Stored Hash:</strong> <code>{{ stored_hash }}</code></p>
+        <p><strong>Current Hash:</strong> <code>{{ current_hash }}</code></p>
+    {% else %}
+        <p class="message error">❌ Hash mismatch. Document may have been tampered with.</p>
+        <p><strong>Stored Hash:</strong> <code>{{ stored_hash }}</code></p>
+        <p><strong>Current Hash:</strong> <code>{{ current_hash }}</code></p>
+    {% endif %}
+
+    <br>
+    <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+</div>
+{% endblock %}

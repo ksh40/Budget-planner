@@ -7,10 +7,11 @@ class UserAdmin(BaseUserAdmin):
     ordering = ['email']
     list_display = ['email', 'first_name', 'last_name', 'username', 'role', 'verification_status', 'is_verified', 'is_staff']
     list_filter = ('role', 'is_verified', 'verification_status')
+    readonly_fields = ('verification_document_hash',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'username', 'role')}),
-        ('Verification', {'fields': ('verification_document', 'is_verified', 'verification_status', 'verification_notes')}),
+        ('Verification', {'fields': ('verification_document','verification_document_hash', 'is_verified', 'verification_status', 'verification_notes')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
     add_fieldsets = (

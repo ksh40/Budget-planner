@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User
+from .models import User, Profile
 
 
 class RegisterForm(forms.ModelForm):
@@ -51,3 +51,13 @@ class VerificationForm(forms.ModelForm):
             if doc.size > 5 * 1024 * 1024:
                 raise forms.ValidationError('File size must be under 5MB.')
         return doc
+
+class ProfileSetupForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['location', 'interests', 'bio', 'profile_picture']
+        widgets = {
+            'interests': forms.TextInput(attrs={'placeholder': 'e.g. music, tech, food, sports'}),
+            'location': forms.TextInput(attrs={'placeholder': 'e.g. Nairobi, Westlands'}),
+            'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Tell us a bit about yourself...'}),
+        }

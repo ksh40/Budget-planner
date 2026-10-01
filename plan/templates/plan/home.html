@@ -1,0 +1,53 @@
+{% extends 'plan/base.html'%}
+{% load static %}
+{% block title %}UkoNaNgapi?{% endblock %}
+{% block content %}
+<div class = "container">
+    <h1>UkoNaNgapi?</h1>
+    <p class="subtitle">Put Your Money Where Your Mouth Is. Discover what your budget unlocks in Nairobi.</p>
+    
+    <div class="cashin">
+        <span class="currency">KSH</span>
+        <input type="number" id="amount" step="0.01" min="0" placeholder="Uko na?" 
+            value="{% if amount %}{{ amount|floatformat:2 }}{% endif %}"  >
+    </div>
+
+     <p class="mode-prompt">Which mood are you in for?</p>
+    <div class="buttons">
+        <button class="mode food" type="button" data-url="{% url 'food_home' %}">
+            <span class="content">Food And Drinks</span>
+        </button>
+
+        <button class="mode activities" type="button" disabled>
+            <span class="content">Activities</span>
+            <span class = "soon">Coming soon</span>
+        </button>
+
+        <button class="mode events" type="button" disabled>
+            <span class="content">Events</span>
+            <span class = "soon">Coming soon</span>
+        </button>
+
+        <button class="mode recipes" type="button" disabled>
+            <span class="content">Recipes</span>
+            <span class = "soon">Coming soon</span>
+        </button>
+
+        <button class="mode transport" type="button" disabled>
+            <span class="content">Transport</span>
+            <span class = "soon">Coming soon</span>
+        </button> 
+    </div>
+    <p class="evently-link">Looking for real events? <a href="{% url 'home' %}">Explore Evently</a></p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll('.mode:not([disabled])').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var amount = document.getElementById('amount').value || '0';
+        window.location.href = btn.dataset.url + '?amount=' + encodeURIComponent(amount);
+    });
+});
+</script>
+{% endblock %}

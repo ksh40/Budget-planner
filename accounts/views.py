@@ -48,8 +48,21 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, 'accounts/profile.html', {'user': request.user})
+    profile = request.user.profile
 
+    if request.method == 'POST':
+        form = ProfileSetupForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated!')
+            return redirect('profile')
+    else:
+        form = ProfileSetupForm(instance=profile)
+
+    return render(request, 'accounts/profile.html', {
+        'user': request.user,
+        'form': form,
+    })
 
 @login_required
 def verification_submit_view(request):

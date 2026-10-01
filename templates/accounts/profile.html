@@ -7,7 +7,11 @@
 
 <div class="profile-container">
     <div class="profile-sidebar">
-        <div class="profile-avatar">👤</div>
+        {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile picture" class="profile-avatar-img">
+        {% else %}
+            <div class="profile-avatar">👤</div>
+        {% endif %}
         <div class="profile-name">{{ user.first_name }} {{ user.last_name }}</div>
         <div class="profile-role">{{ user.get_role_display }}</div>
         {% if user.role == 'organiser' %}
@@ -19,6 +23,17 @@
                 <a href="{% url 'verification_submit' %}" class="btn btn-primary btn-sm">Submit Documents</a>
             {% endif %}
         {% endif %}
+        <div class="profile-summary">
+            {% if user.profile.location %}
+            <p><strong>Location:</strong> {{ user.profile.location }}</p>
+            {% endif %}
+            {% if user.profile.interests %}
+            <p><strong>Interests:</strong> {{ user.profile.interests }}</p>
+            {% endif %}
+            {% if user.profile.bio %}
+            <p class="profile-bio">{{ user.profile.bio }}</p>
+            {% endif %}
+        </div>
     </div>
 
     <div class="profile-info">
@@ -53,6 +68,14 @@
             <a href="{% url 'organiser_dashboard' %}" class="btn btn-secondary btn-sm">My Dashboard</a>
             <a href="{% url 'organiser_analytics' %}" class="btn btn-outline btn-sm">Analytics</a>
         {% endif %}
+         <hr>
+
+        <h3>Edit Profile</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+        </form>
     </div>
 </div>
 {% endblock %}

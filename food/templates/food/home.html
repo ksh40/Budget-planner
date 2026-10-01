@@ -1,0 +1,26 @@
+{% extends 'plan/base.html' %}
+{% block title %}Food & Drinks – UkoNaNgapi?{% endblock %}
+{% block content %}
+<div class="container">
+    <a href="{% url 'homeplan' %}" class="back-btn">← Back to home</a>
+    <h1>Food and Drinks</h1>
+    <p>Budget: KSH {{ amount|floatformat:2 }}</p>
+
+    {% if results %}
+        <ul class="results">
+            {% for r in results %}
+                <li class="result-item">
+                    {% if r.image %}
+                        <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
+                    {% endif %}
+                    <strong>{{ r.name }}</strong> — KSH {{ r.price|floatformat:2 }}
+                    {% if r.place %}<span>({{ r.place }})</span>{% endif %}
+                    <span class="change">KSH {{ r.change|floatformat:2 }} left over</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Unfortunately no items within your budget AS OF NOW.</p>
+    {% endif %}
+</div>
+{% endblock %}

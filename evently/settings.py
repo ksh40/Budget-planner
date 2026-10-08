@@ -121,8 +121,11 @@ INSTALLED_APPS = [
     'core',
     'blockchain',
     #Budget planner apps
+    'import_export',
     'plan',
     'food',
+    'activities',
+    
 ]   
 
 MIDDLEWARE = [

@@ -18,6 +18,7 @@ urlpatterns = [
     #Budget
     path('plan/', include('plan.urls')),
     path('food/', include('food.urls')),
+    path('activities/', include('activities.urls')),
 
 
     path('evently/', evently_home_view, name='home'),   

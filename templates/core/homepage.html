@@ -3,7 +3,9 @@
 {% block content %}
 
 <div class="hero">
-    <h1>Discover Events That <span>Match You</span></h1>
+    <h1 style= "background: linear-gradient(-45deg, #e26d36, #f721de, #4ec756, #c8e014);
+    background-size: 400% 400%; animation: gradientFlow 4s linear infinite; -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; background-clip: text;">Discover Events That <span>Match You</span></h1>
     <p>Personalised event recommendations based on your interests and location in Nairobi.</p>
     <div class="hero-buttons">
         <a href="{% url 'search' %}" class="btn btn-primary">Search Events</a>

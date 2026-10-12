@@ -13,14 +13,17 @@
                     {% if r.image %}
                         <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
                     {% endif %}
-                    <strong>{{ r.name }}</strong> — KSH {{ r.price|floatformat:2 }}
-                    {% if r.place %}<span>({{ r.place }})</span>{% endif %}
-                    <span class="change">KSH {{ r.change|floatformat:2 }} left over</span>
+                    <div class="result-info">
+                        <strong class="result-name">{{ r.name }}
+                        {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}    
+                        </strong class="result-price"> KSH {{ r.price|floatformat:2 }}
+                        <span class="change">KSH {{ r.change|floatformat:2 }} left over</span>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>Unfortunately no items within your budget AS OF NOW.</p>
+        <p>Unfortunately no food/drinks within your budget AS OF NOW.</p>
     {% endif %}
 </div>
 {% endblock %}

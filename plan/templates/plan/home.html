@@ -22,9 +22,8 @@
             <span class="content">Activities</span>
         </button>
 
-        <button class="mode events" type="button" disabled>
+        <button class="mode events" type="button" data-url="{% url 'eventful_home' %}">
             <span class="content">Events</span>
-            <span class = "soon">Coming soon</span>
         </button>
 
         <button class="mode recipes" type="button" disabled>
@@ -37,7 +36,7 @@
             <span class = "soon">Coming soon</span>
         </button> 
     </div>
-    <p class="evently-link">Looking for real events? <a href="{% url 'home' %}">Explore Evently</a></p>
+    <p class="evently-link">Looking for more events but matched to your preferences? <a href="{% url 'home' %}">Explore Evently</a></p>
 </div>
 {% endblock %}
 {% block scripts %}

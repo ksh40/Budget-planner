@@ -21,7 +21,7 @@ def register_view(request):
             messages.success(request, f'Welcome to Evently, {user.username}!')
             if user.role == 'attendee':
                 return redirect('profile_setup')
-            return redirect('/')
+            return redirect('/evently')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
@@ -34,7 +34,7 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             messages.success(request, f'Welcome back, {user.username}!')
-            return redirect('/')
+            return redirect('/evently')
     else:
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})

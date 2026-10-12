@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     'plan',
     'food',
     'activities',
+    'eventful',
     
 ]   
 

@@ -15,8 +15,9 @@
                         <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
                     {% endif %}
                     <div class="result-info">
-                        <strong>{{ r.name }}</strong> — KSH {{ r.price|floatformat:2 }}
-                        {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}
+                        <strong class="result-name">{{ r.name }}
+                        {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}    
+                        </strong class="result-price"> KSH {{ r.price|floatformat:2 }}
                         <span class="change">KSH {{ r.change|floatformat:2 }} left over</span>
                     </div>
                 </li>

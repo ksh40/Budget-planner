@@ -1,11 +1,18 @@
 {% extends 'plan/base.html' %}
 {% block title %}Events – UkoNaNgapi?{% endblock %}
 {% block content %}
-<a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
+<a href="{% url 'homeplan' %}" class="back-btn">← Back To Home</a>
 
 <div class="container">
     <h1>Events</h1>
-    <p>Budget: KSH {{ amount|floatformat:2 }}</p>
+    <p></p>
+    <form method="get" class="budget-form">
+        <label for="amount">Budget: KSH</label>
+        <input type="number" id="amount" name="amount" step="0.01" min="0"
+        placeholder="Uko na?" value="{% if not show_all %}{% if amount %}{{ amount|floatformat:'2u' }}{% endif %}{% endif %}">
+           <button type="submit">Go</button>
+    </form>
+    <a href="?all=1&amount={{ amount|floatformat:'2u' }}" class="show-all-btn">View All Events Without Budgeting</a>
 
     {% if results %}
         <ul class="results">
@@ -17,14 +24,23 @@
                     <div class="result-info">
                         <strong class="result-name">{{ r.name }}
                         {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}    
+                        {% if r.description %}<span class="result-description">{{ r.description }}</span>{% endif %}
                         </strong class="result-price"> KSH {{ r.price|floatformat:2 }}
                         <span class="change">KSH {{ r.change|floatformat:2 }} left over</span>
+                        {% if r.one_time %}<span class="result-tag">One-time event</span>{% endif %}
+                        {% if r.event_date %}<span class="result-date">{{ r.event_date|date:"D j M Y" }}</span>{% endif %}
                     </div>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-         <p>Unfortunately no events are within your budget AS OF NOW.</p>
+         <p style="margin-top: 25px;margin-bottom: 25px;">Unfortunately no events are within your budget AS OF NOW.</p>
     {% endif %}
+
+    {% if not show_all %}<footer style="font-size: 1rem;font-weight: 300;">
+    <p>Budget: KSH {{ amount|floatformat:2 }} </p>
+    <p>SCROLL BACK UP TO EDIT BUDGET</p>
+    </footer>{% endif %}
+
 </div>
 {% endblock %}

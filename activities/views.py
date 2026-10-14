@@ -1,33 +1,20 @@
-from django.shortcuts import render
-
-from decimal import Decimal, InvalidOperation
+from plan.utils import get_budget
 from django.shortcuts import render
 from .models import Activity
 
 
 def activities_home_view(request):
-    raw_amount = request.GET.get('amount', '')
-    try:
-        amount = Decimal(raw_amount)
-    except (InvalidOperation, TypeError):
-        amount = Decimal('0.00')
+    amount, show_all = get_budget(request)
+    activities = Activity.objects.all() if show_all else Activity.objects.filter(price__lte=amount)
 
-    results = []
-
-    if amount >= 0:
-        activities = Activity.objects.filter(price__lte=amount)
-        for a in activities:
-            results.append({
-                'name': a.name,
-                'price': a.price,
+    results = [{'name': a.name, 
+                'price': a.price, 
                 'place': a.location,
-                'image': a.image,
-                'change': amount - a.price,
-            })
-        results.sort(key=lambda r: r['change'])
+                'description': a.description,
+                'image': a.image, 
+                'change': amount - a.price} for a in activities]
+    results.sort(key=lambda r: r['price'] if show_all else r['change'])
 
-    context = {
-        'amount': amount,
-        'results': results,
-    }
-    return render(request, 'activities/home.html', context)
+    return render(request, 'activities/home.html', {
+        'amount': amount, 'show_all': show_all, 'results': results,
+    })

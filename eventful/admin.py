@@ -7,3 +7,21 @@ class EventfulAdmin(ImportExportModelAdmin):
 
     list_display = ('name', 'price', 'location', 'one_time', 'event_date')
     list_filter = ('one_time',)
+    fields = (
+        'name',
+        'price',
+        'category',
+        'location',
+        'area',
+        'description',
+        'one_time',
+        'event_date',
+        'image',
+        'instagram',
+        'twitter',
+        'tiktok',
+        'website',
+        'last_verified',
+    )
+
+    readonly_fields = ('last_verified',)

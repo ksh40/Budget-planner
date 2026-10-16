@@ -26,7 +26,17 @@
                         {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}  
                         {% if r.description %}<span class="result-description">{{ r.description }}</span>{% endif %}  
                         </strong class="result-price"> KSH {{ r.price|floatformat:2 }}
-                        <span class="change">KSH {{ r.change|floatformat:2 }} left over</span>
+                        {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
+                        <div class="social-links">
+                            {% if r.instagram %}<a href="{{ r.instagram }}" target="_blank"
+                            rel="noopener noreferrer">Instagram</a>{% endif %}
+                            {% if r.twitter %}<a href="{{ r.twitter }}" target="_blank"
+                            rel="noopener noreferrer">Twitter</a>{% endif %}
+                            {% if r.tiktok %}<a href="{{ r.tiktok }}" target="_blank"
+                            rel="noopener noreferrer">TikTok</a>{% endif %}
+                            {% if r.website %}<a href="{{ r.website }}" target="_blank"
+                            rel="noopener noreferrer">Website</a>{% endif %}
+                        </div>
                     </div>
                 </li>
             {% endfor %}

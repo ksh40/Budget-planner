@@ -247,7 +247,7 @@ html {
     padding: 0rem;
     color: #1a1f36;
     box-sizing: border-box;
-    height: 240px;
+    height: 270px;
     width: 100%;
     min-width: 0;
     overflow: hidden;
@@ -332,8 +332,11 @@ html {
 .result-date {
     display: block;
     font-size: 0.8rem;
-    font-weight: 300;
-    color: #ff0077;
+    font-weight: 500;
+    background: #ff0077;
+    color: #0e0e0e;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
 }
 
 .change {
@@ -344,6 +347,31 @@ html {
     font-weight: 500;
 }
 
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.social-links a {
+    color: #78d878;
+    background: #9e0505;
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 999px;
+    background: #78d878;
+    color: #ec5f5f;
+}
 
 @media (max-width: 700px) {
     .results {

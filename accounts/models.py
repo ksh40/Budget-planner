@@ -1,6 +1,11 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
+
+def verification_storage():
+    return FileSystemStorage(location=settings.MEDIA_ROOT)
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -34,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # Organiser verification
-    verification_document = models.FileField(upload_to='verification_docs/', blank=True, null=True)
+    verification_document = models.FileField(upload_to='verification_docs/',storage=verification_storage, blank=True, null=True)
     verification_document_hash = models.CharField(max_length=64, blank=True)
     is_verified = models.BooleanField(default=False)
     verification_status = models.CharField(

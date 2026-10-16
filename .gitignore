@@ -16,5 +16,8 @@ media/verification_docs/
 
 # VS Code
 .vscode/
-
 staticfiles/
+
+#media
+img/
+media/

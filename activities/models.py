@@ -1,6 +1,5 @@
 from django.db import models
 
-from django.db import models
 
 
 class Activity(models.Model):
@@ -10,6 +9,10 @@ class Activity(models.Model):
     location = models.CharField(max_length=150)
     area = models.CharField(max_length=100, default="Nairobi")
     description = models.TextField(blank=True)
+    instagram = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+    tiktok = models.URLField(blank=True)
+    website = models.URLField(blank=True)
     image = models.ImageField(upload_to='activities/', blank=True, null=True)
     last_verified = models.DateField(auto_now=True)
 

@@ -20,6 +20,8 @@ def food_home_view(request):
     for item in items:
         results.append({'type': 'item', 'name': item.name, 'price': item.price,
                         'place': item.place, 'image': item.image,
+                        'instagram':item.instagram,'twitter':item.twitter,
+                        'tiktok':item.tiktok,'website':item.website,
                         'change': amount - item.price})
     for bundle in bundles:
         results.append({'type': 'bundle', 'name': bundle.title, 'price': bundle.price,

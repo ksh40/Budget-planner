@@ -12,6 +12,10 @@ def activities_home_view(request):
                 'place': a.location,
                 'description': a.description,
                 'image': a.image, 
+                'instagram':a.instagram,
+                'twitter':a.twitter,
+                'tiktok':a.tiktok,
+                'website':a.website,
                 'change': amount - a.price} for a in activities]
     results.sort(key=lambda r: r['price'] if show_all else r['change'])
 

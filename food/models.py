@@ -12,6 +12,10 @@ class Item(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     place = models.CharField(max_length=150)
     area = models.CharField(max_length=100)
+    instagram = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+    tiktok = models.URLField(blank=True)
+    website = models.URLField(blank=True)
     image = models.ImageField(upload_to='food_items/', blank=True, null=True)
     last_verified = models.DateField(auto_now=True)
 

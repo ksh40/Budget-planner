@@ -5,10 +5,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
+
 ALLOWED_HOSTS = [
+    ".koyeb.app",
     ".onrender.com",
+    "ukonangapi.lol",
+    "www.ukonangapi.lol",
     "localhost",
-    "127.0.0.1",
+    "127.0.0.1",    
 ]
 
 INSTALLED_APPS = [
@@ -132,5 +136,10 @@ INFURA_API_KEY = config('INFURA_API_KEY')
 WALLET_ADDRESS = config('WALLET_ADDRESS')
 WALLET_PRIVATE_KEY = config('WALLET_PRIVATE_KEY')
 
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.koyeb.app",
+    "https://*.onrender.com",
+    "https://ukonangapi.lol",
+    "https://www.ukonangapi.lol",
+    ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

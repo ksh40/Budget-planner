@@ -290,7 +290,7 @@ footer {
 
 @media (max-width: 600px) {
     .buttons {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
 
     h1 {

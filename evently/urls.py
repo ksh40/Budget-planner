@@ -21,7 +21,7 @@ urlpatterns = [
     path('food/', include('food.urls')),
     path('activities/', include('activities.urls')),
     path('eventful/', include('eventful.urls')),
-
+    path('punguza/', include('punguza.urls')),
 
     path('evently/', evently_home_view, name='home'),   
     path('', include('plan.urls')), 

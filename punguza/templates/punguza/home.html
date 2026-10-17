@@ -1,0 +1,78 @@
+{% extends 'plan/base.html' %}
+{% load l10n %}
+{% block title %}"Nitapunguza" LOL – UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
+
+<div class="container">
+    <h1>"Nitapunguza" LOL</h1>
+    <p class="age-note">18+ only. Please drink responsibly.</p>
+
+    <form method="get" class="budget-form">
+        <label for="amount">Budget: KSH</label>
+        <input type="number" id="amount" name="amount" step="0.01" min="0"
+               placeholder="Uko na?" value="{% if amount %}{{ amount|floatformat:'2u' }}{% endif %}">
+        <button type="submit">Go</button>
+    </form>
+    <a href="?all=1&amount={{ amount|floatformat:'2u' }}" class="show-all-btn">View All Products Without Budgeting</a>
+    
+
+    {% if results %}
+        <ul class="results tulia">
+            {% for r in results %}
+                <li class="result-item">
+                    <div class="result-img-wrap">
+                        {% if r.image %}<img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">{% endif %}
+                    </div>
+                     <div class="result-body">
+                        <span class="result-name" title="{{ r.name }}">{{ r.name }}</span>
+                        <span class="result-place">{{ r.place }}</span>
+                        <span class="result-price">KSH {{ r.price|floatformat:2 }}</span>
+                        {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
+
+                        <div class="split" data-price="{{ r.price|unlocalize }}">
+                            <div class="split-controls">
+                                <button type="button" class="split-minus" aria-label="Fewer people" disabled>−</button>
+                                <span class="split-count">1</span>
+                                <button type="button" class="split-plus" aria-label="More people">+</button>
+                            </div>
+                            <p class="split-text">Out of the <span class="split-people">1 person</span>, each person pays KSH <span class="split-each">{{ r.price|floatformat:2 }}</span></p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p style="margin-top: 25px;margin-bottom: 25px;
+        color: rgb(232, 4, 4);background: #0d012f;
+        font-weight: 400;font-size: 1.4rem;">Unfortunately no drinks within your budget AS OF NOW.</p>
+    {% endif %}
+    {% if not show_all %}<footer style="font-size: 1rem;font-weight: 300;">
+    <p>Budget: KSH {{ amount|floatformat:2 }} </p>
+    <p>SCROLL BACK UP TO EDIT BUDGET</p>
+    </footer>{% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.split').forEach(function (box) {
+    var price = parseFloat(box.dataset.price);
+    var count = 1;
+    var minus = box.querySelector('.split-minus');
+    var plus = box.querySelector('.split-plus');
+    var countEl = box.querySelector('.split-count');
+    var textEl = box.querySelector('.split-text');
+
+    function update() {
+        countEl.textContent = count;
+        minus.disabled = count === 1;
+        textEl.textContent = 'Out of the ' + count + (count === 1 ? ' person' : ' people') +
+            ', each person pays KSH ' + (price / count).toFixed(2);
+    }
+
+    minus.addEventListener('click', function () { if (count > 1) { count--; update(); } });
+    plus.addEventListener('click', function () { count++; update(); });
+});
+</script>
+{% endblock %}

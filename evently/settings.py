@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'food',
     'activities',
     'eventful',
+    'punguza',
     
 ]   
 

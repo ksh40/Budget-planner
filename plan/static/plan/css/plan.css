@@ -131,11 +131,126 @@ h1{
 }
 
 
+.age-note { 
+    font-size: 0.8rem; 
+    color: #b9d711; 
+    background: #000000;
+    font-weight: 400;
+    font-size: 1.1rem;
+    margin: 0.25rem 0 1rem; }
+
+.split { margin-top: 0.5rem; width: 100%; }
+
+.split-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 999px;
+    padding: 0.15rem;
+}
+
+.split-controls button {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 50%;
+    background: #639922;
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.split-controls button:disabled { opacity: 0.35; cursor: not-allowed; }
+.split-count { min-width: 1.5rem; text-align: center; font-weight: 600; }
+.split-text { margin-top: 0.35rem; font-size: 0.75rem; color: #374151; min-height: 2.6em; }
+
+.tulia {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
+    gap: 1rem;
+    padding: 0;
+}
+
+.tulia .result-item {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; 
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 12px;    
+    text-align: left;
+}
+
+.tulia .result-img-wrap {
+    position: relative;
+    flex: 0 0 170px;
+    width: 170px;
+    min-height: 170px;
+    margin: 0;
+    overflow: hidden;
+}
+
+.tulia .result-img { 
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    min-width: 100%;
+    object-fit: cover;
+}
+
+.tulia .result-name,
+.tulia .result-place,
+.tulia .result-price,
+.tulia .change {
+    display: block; 
+    font-family: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tulia .result-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem; 
+    padding: 0.75rem 1rem;
+}
+
+.tulia .result-name  { font-size: 1rem; font-weight: 600; color: #1a1f36; }
+.tulia .result-place { font-size: 0.85rem; color: #6b7280; }
+.tulia .result-price { font-size: 1rem; font-weight: 500; }
+.tulia .change       { font-size: 0.75rem; color: #3B6D11; font-weight: 500; }
+.tulia .split { 
+    margin-top: 0.4rem; 
+}
+.tulia .split-text { 
+    min-height: 2.6em;
+    font-size: 0.78rem; 
+    color: #e03902; 
+    font-weight: 900;
+}
+
+
+@media (max-width: 400px) {
+    .tulia .result-img-wrap { 
+        flex-basis: 120px; 
+        width: 120px; 
+        min-height: 120px; 
+    }
+}
+
 .food { background-image: url("/static/plan/images/food.jpg"); }
 .activities { background-image: url("/static/plan/images/activities.jpg"); }
 .events { background-image: url("/static/plan/images/events.jpg"); }
 .recipes { background-image: url("/static/plan/images/recipes.jpg"); }
 .transport { background-image: url("/static/plan/images/transport.jpg"); }
+.punguza { background-image: url("/static/plan/images/punguza.jpg"); }
 
 
 .evently-link {

@@ -13,6 +13,7 @@ class Eventful(models.Model):
     twitter = models.URLField(blank=True)
     tiktok = models.URLField(blank=True)
     website = models.URLField(blank=True)
+    tickets = models.URLField(blank=True)
     one_time = models.BooleanField(default=False, help_text="Shows a 'One-time event' tag")
     event_date = models.DateField(blank=True, null=True, help_text="Optional. Shown under the tag")
     image = models.ImageField(upload_to='activities/', blank=True, null=True)
@@ -20,3 +21,4 @@ class Eventful(models.Model):
 
     def __str__(self):
         return f"{self.name} — KSH {self.price}"
+    

@@ -24,3 +24,5 @@ for model in apps.get_models():
                 model.objects.filter(pk=obj.pk).update(**{field.name: new_name})
 
 print("\nDry run only." if DRY_RUN else "\nDone.")
+
+# python manage.py shell -c "exec(open('upload_images.py').read())"......code line to show images on site

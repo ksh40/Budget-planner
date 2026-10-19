@@ -19,7 +19,9 @@
             {% for r in results %}
                 <li class="result-item">
                     {% if r.image %}
+                    <div class="result-img-wrap">
                         <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
+                    </div>
                     {% endif %}
                     <div class="result-info">
                         <strong class="result-name">{{ r.name }}
@@ -37,7 +39,11 @@
                             {% if r.tiktok %}<a href="{{ r.tiktok }}" target="_blank"
                             rel="noopener noreferrer">TikTok</a>{% endif %}
                             {% if r.website %}<a href="{{ r.website }}" target="_blank"
-                            rel="noopener noreferrer">Website</a>{% endif %}
+                            rel="noopener noreferrer">Web</a>{% endif %}
+                        </div>
+                        <div class="tickets"> 
+                            {% if r.tickets %}<a href="{{ r.tickets }}" target="_blank"
+                            rel="noopener noreferrer">GET YOUR TICKETS NOW!!</a>{% endif %}
                         </div>
                     </div>
                     

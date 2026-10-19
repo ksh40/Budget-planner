@@ -21,7 +21,9 @@ class EventfulAdmin(ImportExportModelAdmin):
         'twitter',
         'tiktok',
         'website',
+        'tickets',
         'last_verified',
     )
+
 
     readonly_fields = ('last_verified',)

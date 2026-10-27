@@ -1,0 +1,60 @@
+{% extends 'plan/base.html' %}
+{% block title %}Registration | UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
+
+<div class="container wn-auth">
+    <h1>Create an account</h1>
+    <p class="wn-lead">Save posts and find them again on your profile.</p>
+    <form method="post" class="wn-form">
+        {% csrf_token %}
+        <label for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" autocomplete="username"
+               autocapitalize="none" maxlength="30" required autofocus value="{{ form.username.value|default:'' }}">
+        {% for error in form.username.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_password">Password</label>
+        <div class="wn-pass">
+            <input type="password" name="password" id="id_password" autocomplete="new-password" required>
+            <button type="button" class="wn-eye" data-toggle-pass aria-pressed="false" aria-label="Show password">
+                <svg class="wn-eye-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="wn-eye-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+        </div>
+        <p class="wn-hint">At least 8 characters. There's no email, so keep in mind.</p>
+        {% for error in form.password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+        
+        <details class="wn-policy">
+            <summary>Read the privacy policy</summary>
+            <div class="wn-policy-body">
+                <p>UkoNaNgapi? reserve the right to adjust the policy at any given moment of which you and the rest of the users will promptly 
+                    updated. If you want to keep up to date with the latest changes either follow our social media(accessible at the bottom
+                    of the page) or visit the site frequently.</p>
+                <p>The user data we may collect is your IP address and your data profile, with regards to your online behaviour. We collect 
+                    such data to better understand your interests, customization of the site according to your online behaviour and to improve
+                    our services </p>
+                <p>UkoNaNgapi is committed to securing your data and keeping it confidential. We have tried our best to prevent data theft,
+                    unauthorised access and disclosure by implementing the latest tech, data hashing and encryption which will help us 
+                    safeguard all the info we collect online.</p>
+                <p> Once you agree to allow our site to use cookies, you also agree to use the data it collects regarding your online behaviour.
+                    The data collected we collect by using cookies for the website customization and after its use, it is completely disposed off
+                    our systems</p>
+                <p>The website contains links that will lead you to other sites. If you click on those links, UkoNaNgapi is not held responsible 
+                    for your data and privacy protection. Visiting those websites is not governed by this policy agreement. 
+                </p>
+            </div>
+        </details>
+
+        <label class="wn-check">
+            <input type="checkbox" name="agree" required {% if form.agree.value %}checked{% endif %}>
+            <span>I have read and agreed to the privacy policy</span>
+        </label>
+        {% for error in form.agree.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="wn-submit">Create account</button>
+    </form>
+    <p class="wn-alt">Already have one? <a href="{% url 'wangapi_login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Sign in</a></p>
+</div>
+{% endblock %}

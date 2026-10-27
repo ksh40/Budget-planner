@@ -1,6 +1,16 @@
 {% extends 'plan/base.html' %}
-{% block title %}Activities – UkoNaNgapi?{% endblock %}
+{% block og_title %}Activities | UkoNaNgapi?{% endblock %}
+{% block og_description %}
+Discover activities within your budget around Nairobi.
+{% endblock %}
+
+{% block og_image %}
+https://ukonangapi.lol/static/images/uknactivity.jpg
+{% endblock %}
+{% block og_url %}https://ukonangapi.lol/activities/{% endblock %}
+{% block title %}Activities | UkoNaNgapi?{% endblock %}
 {% block content %}
+
 <a href="{% url 'homeplan' %}" class="back-btn">← Back To Home</a>
 
 <div class="container">
@@ -23,22 +33,25 @@
                         <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
                     </div>
                     {% endif %}
-                    <div class="result-info">
-                        <strong class="result-name">{{ r.name }}
-                        {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}  
-                        {% if r.description %}<span class="result-description">{{ r.description }}</span>{% endif %}  
-                        </strong class="result-price"> KSH {{ r.price|floatformat:2 }}
-                        {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
-                        <div class="social-links">
-                            {% if r.instagram %}<a href="{{ r.instagram }}" target="_blank"
-                            rel="noopener noreferrer">Instagram</a>{% endif %}
-                            {% if r.twitter %}<a href="{{ r.twitter }}" target="_blank"
-                            rel="noopener noreferrer">Twitter</a>{% endif %}
-                            {% if r.tiktok %}<a href="{{ r.tiktok }}" target="_blank"
-                            rel="noopener noreferrer">TikTok</a>{% endif %}
-                            {% if r.website %}<a href="{{ r.website }}" target="_blank"
-                            rel="noopener noreferrer">Web</a>{% endif %}
+                    <div class="result-body has-bm">
+                        <div class="result-content">
+                            <strong class="result-name">{{ r.name }}
+                            {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}
+                            {% if r.description %}<span class="result-description">{{ r.description }}</span>{% endif %}
+                            </strong class="result-price"> KSH {{ r.price|floatformat:2 }}
+                            {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
+                            <div class="social-links">
+                                {% if r.instagram %}<a href="{{ r.instagram }}" target="_blank"
+                                rel="noopener noreferrer">Instagram</a>{% endif %}
+                                {% if r.twitter %}<a href="{{ r.twitter }}" target="_blank"
+                                rel="noopener noreferrer">Twitter</a>{% endif %}
+                                {% if r.tiktok %}<a href="{{ r.tiktok }}" target="_blank"
+                                rel="noopener noreferrer">TikTok</a>{% endif %}
+                                {% if r.website %}<a href="{{ r.website }}" target="_blank"
+                                rel="noopener noreferrer">Web</a>{% endif %}
+                            </div>
                         </div>
+                        {% include 'wangapi/bookmark_button.html' with kind=r.kind pk=r.pk saved=r.saved count=r.saves %}
                     </div>
                 </li>
             {% endfor %}

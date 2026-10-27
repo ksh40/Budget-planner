@@ -1,7 +1,17 @@
 {% extends 'plan/base.html' %}
 {% load l10n %}
-{% block title %}"Nitapunguza" LOL – UkoNaNgapi?{% endblock %}
+{% block og_title %}"Nitapunguza" LOL | UkoNaNgapi?{% endblock %}
+{% block og_description %}
+Discover alcohol within your budget around Nairobi.
+{% endblock %}
+
+{% block og_image %}
+https://ukonangapi.lol/static/images/uknpunguza.jpg
+{% endblock %}
+{% block og_url %}https://ukonangapi.lol/punguza/{% endblock %}
+{% block title %}"Nitapunguza" LOL | UkoNaNgapi?{% endblock %}
 {% block content %}
+
 <a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
 
 <div class="container">
@@ -24,21 +34,37 @@
                     <div class="result-img-wrap">
                         {% if r.image %}<img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">{% endif %}
                     </div>
-                     <div class="result-body">
-                        <span class="result-name" title="{{ r.name }}">{{ r.name }}</span>
-                        <span class="result-place">{{ r.place }}</span>
-                        <span class="result-price">KSH {{ r.price|floatformat:2 }}</span>
-                        {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
+                     <div class="result-body  has-bm">
+                        <div class="result-content">
+                            <span class="result-name" title="{{ r.name }}">{{ r.name }}</span>
+                            <span class="result-place">{{ r.place }}</span>
+                            <span class="result-price">KSH {{ r.price|floatformat:2 }}</span>
+                            {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
 
-                        <div class="split" data-price="{{ r.price|unlocalize }}">
-                            <div class="split-controls">
-                                <button type="button" class="split-minus" aria-label="Fewer people" disabled>−</button>
-                                <span class="split-count">1</span>
-                                <button type="button" class="split-plus" aria-label="More people">+</button>
+                            <div class="split" data-price="{{ r.price|unlocalize }}">
+                                <div class="split-controls">
+                                    <button type="button" class="split-minus" aria-label="Fewer people" disabled>−</button>
+                                    <span class="split-count">1</span>
+                                    <button type="button" class="split-plus" aria-label="More people">+</button>
+                                </div>
+                                <p class="split-text">Out of the <span class="split-people">1 person</span>, each person pays KSH <span class="split-each">{{ r.price|floatformat:2 }}</span></p>
                             </div>
-                            <p class="split-text">Out of the <span class="split-people">1 person</span>, each person pays KSH <span class="split-each">{{ r.price|floatformat:2 }}</span></p>
+                            <div class="comrades" data-price="{{ r.price|unlocalize }}">
+                                <button type="button" class="comrades-toggle" aria-expanded="false">Comrades</button>
+                                <div class="comrades-panel" hidden>
+                                    <p class="comrades-hint">Uneven contributions? Each person enters their own amount.</p>
+                                    <div class="comrades-rows"></div>
+                                    <div class="comrades-actions">
+                                        <button type="button" class="comrades-add">+ Add person</button>
+                                        <button type="button" class="comrades-clear">Clear</button>
+                                    </div>
+                                    <div class="comrades-bar"><div class="comrades-bar-fill"></div></div>
+                                    <p class="comrades-summary" aria-live="polite"></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        {% include 'wangapi/bookmark_button.html' with kind=r.kind pk=r.pk saved=r.saved count=r.saves %}
+                    </div>  
                 </li>
             {% endfor %}
         </ul>
@@ -74,5 +100,112 @@ document.querySelectorAll('.split').forEach(function (box) {
     minus.addEventListener('click', function () { if (count > 1) { count--; update(); } });
     plus.addEventListener('click', function () { count++; update(); });
 });
+</script>
+<script>
+(function () {
+    function cents(v) {
+        var n = parseFloat(v);
+        return isNaN(n) || n < 0 ? 0 : Math.round(n * 100);
+    }
+
+    function money(c) {
+        return (c / 100).toFixed(2);
+    }
+
+    function describe(priceCents, amounts) {
+        var sum = amounts.reduce(function (a, b) { return a + b; }, 0);
+        var remaining = priceCents - sum;
+        var pct = priceCents > 0 ? Math.min(100, sum / priceCents * 100) : 0;
+        var state = remaining < 0 ? 'over' : (remaining === 0 && sum > 0 ? 'full' : 'open');
+        var text;
+        if (sum === 0) {
+            text = 'Nobody has chipped in yet. KSH ' + money(priceCents) + ' to go.';
+        } else if (remaining > 0) {
+            text = 'Collected KSH ' + money(sum) + ' of KSH ' + money(priceCents) + '. Remaining: KSH ' + money(remaining);
+        } else if (remaining === 0) {
+            text = 'Fully covered: KSH ' + money(sum) + ' of KSH ' + money(priceCents) + '.';
+        } else {
+            text = 'KSH ' + money(sum) + ' collected, which is KSH ' + money(-remaining) + ' over the price.';
+        }
+        return { pct: pct, state: state, text: text };
+    }
+
+    document.querySelectorAll('.comrades').forEach(function (box) {
+        var price = cents(box.dataset.price);
+        var toggle = box.querySelector('.comrades-toggle');
+        var panel = box.querySelector('.comrades-panel');
+        var rowsEl = box.querySelector('.comrades-rows');
+        var addBtn = box.querySelector('.comrades-add');
+        var clearBtn = box.querySelector('.comrades-clear');
+        var fill = box.querySelector('.comrades-bar-fill');
+        var summary = box.querySelector('.comrades-summary');
+
+        function refresh() {
+            var rows = rowsEl.querySelectorAll('.comrades-row');
+            var amounts = [];
+            rows.forEach(function (row, i) {
+                row.querySelector('.comrades-label').textContent = 'Comrade ' + (i + 1);
+                row.querySelector('.comrades-remove').hidden = rows.length === 1;
+                amounts.push(cents(row.querySelector('.comrades-amount').value));
+            });
+            var d = describe(price, amounts);
+            fill.style.width = d.pct + '%';
+            box.classList.toggle('is-full', d.state === 'full');
+            box.classList.toggle('is-over', d.state === 'over');
+            summary.textContent = d.text;
+        }
+
+        function addRow() {
+            var row = document.createElement('div');
+            row.className = 'comrades-row';
+
+            var label = document.createElement('span');
+            label.className = 'comrades-label';
+
+            var input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.step = 'any';
+            input.inputMode = 'decimal';
+            input.placeholder = '0';
+            input.className = 'comrades-amount';
+
+            var remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'comrades-remove';
+            remove.setAttribute('aria-label', 'Remove comrade');
+            remove.textContent = '×';
+
+            row.append(label, input, remove);
+            rowsEl.appendChild(row);
+            refresh();
+            return input;
+        }
+
+        toggle.addEventListener('click', function () {
+            var opening = panel.hidden;
+            panel.hidden = !opening;
+            toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+            toggle.textContent = opening ? 'Hide comrades' : 'Comrades';
+            if (opening && !rowsEl.children.length) { addRow(); addRow(); }
+        });
+
+        addBtn.addEventListener('click', function () { addRow().focus(); });
+
+        clearBtn.addEventListener('click', function () {
+            rowsEl.querySelectorAll('.comrades-amount').forEach(function (i) { i.value = ''; });
+            refresh();
+        });
+
+        rowsEl.addEventListener('input', refresh);
+
+        rowsEl.addEventListener('click', function (e) {
+            if (e.target.classList.contains('comrades-remove')) {
+                e.target.closest('.comrades-row').remove();
+                refresh();
+            }
+        });
+    });
+})();
 </script>
 {% endblock %}

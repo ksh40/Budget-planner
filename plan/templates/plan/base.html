@@ -5,9 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}UkoNaNgapi?{% endblock %}</title>
+
+    <meta property="og:title"
+        content="{% block og_title %}UkoNaNgapi? — Discover Nairobi on Your Budget{% endblock %}">
+    <meta property="og:description"
+      content="{% block og_description %}Discover Nairobi on your budget.{% endblock %}">
+    <meta property="og:image"
+      content="{% block og_image %}https://ukonangapi.lol/static/images/ukopreview.jpg{% endblock %}">
+    <meta property="og:url"
+      content="{% block og_url %}https://ukonangapi.lol/{% endblock %}">
+    <meta property="og:type" content="website">
+
     <link rel="icon" type="image/png" href="{% static 'plan/images/uko.png' %}">
     <link rel="apple-touch-icon" href="{% static 'plan/images/uko.png' %}">
     <link rel="stylesheet" href="{% static 'plan/css/plan.css' %}">
+    <link rel="stylesheet" href="{% static 'wangapi/wangapi.css' %}">
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -15,20 +29,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Marker+Hatch&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Joti+One&family=Tektur:wght@400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    {% include 'wangapi/nav.html' %}
     <main>
-        {% if messages %}
+    {% if messages %}
+        <div class="plan-messages">
             {% for message in messages %}
-                <div class="message {{ message.tags }}">{{ message }}</div>
+                <div class="message {{ message.tags }}" role="status">
+                    <span class="message-text">{{ message }}</span>
+                    <button type="button" class="message-close" aria-label="Dismiss message">×</button>
+                </div>
             {% endfor %}
-        {% endif %}
-        {% block content %}{% endblock %}
+        </div>
+    {% endif %}
+    {% block content %}{% endblock %}
     </main>
-    <footer>
-        <p> Contact: ads@ukonangapi.lol </p>
-        <p>© 2026 UkoNaNgapi? — What You Can Get With Your Budget In Nairobi.</p>
+    <footer class="site-footer">
+    <nav class="site-social" aria-label="Contact and social media">
+        <a href="https://www.instagram.com/ukonangapi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.tiktok.com/@ukonangapi" target="_blank" rel="noopener noreferrer">TikTok</a>
+        <a href="https://x.com/JeUkoNaNgapi" target="_blank" rel="noopener noreferrer">Twitter</a>
+        <a href="mailto:ads@ukonangapi.lol">Contact Email</a>
+    </nav>
+        <p style="padding-top: 5px;">© 2026 UkoNaNgapi? — What You Can Get With Your Budget In Nairobi.</p>
     </footer>
     {% block scripts %}{% endblock %}
+    <script src="{% static 'wangapi/wangapi.js' %}" defer></script>
 </body>
 </html>

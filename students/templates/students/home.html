@@ -1,0 +1,69 @@
+{% extends 'plan/base.html' %}
+{% block og_title %}Student Offers | UkoNaNgapi?{% endblock %}
+{% block og_description %}
+Discover student offers within your budget around Nairobi.
+{% endblock %}
+
+{% block og_image %}
+https://ukonangapi.lol/static/images/uknstudents.jpg
+{% endblock %}
+{% block og_url %}https://ukonangapi.lol/students/{% endblock %}
+{% block title %}Student Offers | UkoNaNgapi?{% endblock %}
+{% block content %}
+
+<a href="{% url 'homeplan' %}" class="back-btn">← Back To Home</a>
+
+<div class="container">
+    <h1>Student Offers</h1>
+    <p></p>
+    <form method="get" class="budget-form">
+        <label for="amount">Budget: KSH</label>
+        <input type="number" id="amount" name="amount" step="0.01" min="0"
+        placeholder="Uko na?" value="{% if not show_all %}{% if amount %}{{ amount|floatformat:'2u' }}{% endif %}{% endif %}">
+           <button type="submit">Go</button>
+    </form>
+    <a href="?all=1&amount={{ amount|floatformat:'2u' }}" class="show-all-btn">View All Student Offers Without Budgeting</a>
+
+    {% if results %}
+        <ul class="results">
+            {% for r in results %}
+                <li class="result-item">
+                    {% if r.image %}
+                    <div class="result-img-wrap">
+                        <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
+                    </div>
+                    {% endif %}
+                    <div class="result-body has-bm">
+                        <div class="result-content">
+                            <span class="result-name">{{ r.name }}</span>
+                            {% if r.place %}<span class="result-place">{{ r.place }}</span>{% endif %}
+                            {% if r.description %}<span class="result-description">{{ r.description }}</span>{% endif %}
+                            <span class="result-price">KSH {{ r.price|floatformat:2 }}{% if r.savings %} <s class="result-was">KSH {{ r.og_price|floatformat:2 }}</s>{% endif %}</span>
+                            {% if r.percent_off %}<span class="discount-badge">{{ r.percent_off }}% off</span>{% endif %}
+                            {% if r.savings %}<span class="result-save">You save KSH {{ r.savings|floatformat:2 }}</span>{% endif %}
+                            {% if r.discount_note %}<span class="discount-note">{{ r.discount_note }}</span>{% endif %}
+                            {% if not show_all %}<span class="change">KSH {{ r.change|floatformat:2 }} left over</span>{% endif %}
+                            {% if r.website %}
+                            <div class="social-links">
+                                <a href="{{ r.website }}" target="_blank" rel="noopener noreferrer">Website</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% include 'wangapi/bookmark_button.html' with kind=r.kind pk=r.pk saved=r.saved count=r.saves %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+         <p style="margin-top: 25px;margin-bottom: 25px;
+        color: rgb(232, 4, 4);background: #0d012f;
+        font-weight: 400;font-size: 1.4rem;">Unfortunately no Student Offers are within your budget AS OF NOW.</p>
+    {% endif %}
+
+    {% if not show_all %}<footer style="font-size: 1rem;font-weight: 300;">
+    <p>Budget: KSH {{ amount|floatformat:2 }} </p>
+    <p>SCROLL BACK UP TO EDIT BUDGET</p>
+    </footer>{% endif %}
+    
+</div>
+{% endblock %}

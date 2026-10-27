@@ -12,6 +12,7 @@ ALLOWED_HOSTS = [
     "www.ukonangapi.lol",
     "localhost",
     "127.0.0.1",
+    "192.168.100.14",
 ]
 
 INSTALLED_APPS = [
@@ -39,11 +40,14 @@ INSTALLED_APPS = [
     'activities',
     'eventful',
     'punguza',
+    'students',
+    'wangapi',
     
 ]   
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "plan.middleware.OldDomainRedirectMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,6 +139,9 @@ DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
 INFURA_API_KEY = config('INFURA_API_KEY')
 WALLET_ADDRESS = config('WALLET_ADDRESS')
 WALLET_PRIVATE_KEY = config('WALLET_PRIVATE_KEY')
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com'

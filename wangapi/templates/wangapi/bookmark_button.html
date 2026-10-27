@@ -1,0 +1,6 @@
+<button type="button" class="bm-btn{% if saved %} is-saved{% endif %}"
+        data-kind="{{ kind }}" data-pk="{{ pk }}"
+        aria-pressed="{% if saved %}true{% else %}false{% endif %}">
+    <span class="bm-label">{% if saved %}Nimekumark{% else %}Hmmmmmm🤔{% endif %}</span>
+    <span class="bm-count"{% if not count %} hidden{% endif %}>{{ count }}</span>
+</button>

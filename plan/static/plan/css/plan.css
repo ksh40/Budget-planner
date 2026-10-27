@@ -92,15 +92,15 @@ h1{
 
 .mode {
     position: relative;
-    height: 140px;
-    width: 250px;
+    height: 150px;
+    width: 270px;
     border: none;
     border-radius: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: #f2eff3;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
@@ -172,6 +172,7 @@ h1{
     grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
     gap: 1rem;
     padding: 0;
+    align-items: start;
 }
 
 .tulia .result-item {
@@ -236,6 +237,70 @@ h1{
     font-weight: 900;
 }
 
+.comrades { margin-top: 0.5rem; width: 100%; }
+.comrades [hidden] { display: none !important; }
+
+.comrades-toggle {
+    border: 4px solid #af07bb;
+    background: transparent;
+    color: #af07bb;
+    border-radius: 999px;
+    padding: 0.25rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.comrades-toggle[aria-expanded="true"] { background: #af07bb; color: #fff; }
+
+.comrades-panel {
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.05);
+}
+.comrades-hint { font-size: 0.75rem; color: #6b7280; margin-bottom: 0.4rem; }
+
+.comrades-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
+.comrades-label { flex: 0 0 5.5rem; font-size: 0.8rem; color: #374151; }
+.comrades-amount {
+    flex: 1;
+    min-width: 0;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #af07bb;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: #fff;
+}
+.comrades-remove {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: #e5e7eb;
+    color: #374151;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.comrades-actions { display: flex; gap: 0.75rem; margin: 0.4rem 0; }
+.comrades-add, .comrades-clear {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.comrades-add { color: #af07bb; font-weight: 600; }
+.comrades-clear { color: #6b7280; }
+
+.comrades-bar { height: 6px; border-radius: 999px; background: #e5e7eb; overflow: hidden; }
+.comrades-bar-fill { height: 100%; width: 0; background: #af07bb; transition: width 0.2s ease; }
+.comrades-summary { margin-top: 0.4rem; font-size: 0.78rem; color: #374151; }
+
+.comrades.is-full .comrades-bar-fill { background: #3B6D11; }
+.comrades.is-over .comrades-bar-fill { background: #d9534f; }
+.comrades.is-over .comrades-summary { color: #b3261e; }
+
 
 @media (max-width: 400px) {
     .tulia .result-img-wrap { 
@@ -250,8 +315,8 @@ h1{
 .events { background-image: url("/static/plan/images/events.jpg"); }
 .recipes { background-image: url("/static/plan/images/recipes.jpg"); }
 .transport { background-image: url("/static/plan/images/transport.jpg"); }
-.punguza { background-image: url("/static/plan/images/punguza.jpg"); }
-
+.punguza { background-image: url("/static/plan/images/punguza.jpg"); } 
+.students { background-image: url("/static/plan/images/sch.jpg"); }
 
 .evently-link {
     margin-top: 2rem;
@@ -271,14 +336,52 @@ footer {
     color: #a7a5a5;
     background: rgba(0, 0, 0, 0.35);
 }
+.site-social { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.site-social a {
+    padding: 0.25rem 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    text-decoration: none;
+}
+.site-social a:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+.site-social a:focus-visible { outline: 2px solid #b9d711; outline-offset: 2px; }
 
 .message {
-    background: #fff;
+    background: #fdbf8d;
     color: #333;
     padding: 0.6rem 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
 }
+
+
+.plan-messages .message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.message-text {
+    flex: 1;
+    text-align: center;
+}
+
+.message-close {
+    flex: 0 0 auto;
+    padding: 0 0.25rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.message-close:hover { opacity: 1; }
+.message-close:focus-visible { outline: 2px solid #639922; outline-offset: 2px; }
 
 .message.error {
     border-left: 4px solid #d9534f;
@@ -291,6 +394,7 @@ footer {
 @media (max-width: 600px) {
     .buttons {
         grid-template-columns: 1fr;
+        justify-content: center;
     }
 
     h1 {
@@ -378,11 +482,9 @@ html {
 .result-img {
     display: block;
     width: 100%;
-    /* min-width: 50%; */
     height: 100%;
     position: absolute;
     object-fit: cover;
-    /* flex-shrink: 0; */
     inset: 0;
 }
 
@@ -419,26 +521,29 @@ html {
 .result-place {
     display: block;
     font-family: "Sanchez", serif;
-    font-size: 0.85rem;
+    font-size: 0.89rem;
     line-height: 1.3;
     color: #6b7280;
+    padding-bottom: 0.5rem;
 }
 
 .result-price {
     display: block;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 1rem;
     line-height: 1.3;
+    
 }
 
 .result-description {
     display: block;
     font-family: "Saira", sans-serif;
     font-weight: 1500;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     line-height: 1.1;
     color: #058b85;
     overflow-wrap: anywhere;
+    padding-bottom: 1rem;
 }
 
 .result-tag {
@@ -452,6 +557,7 @@ html {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    justify-content: center;
 }
 
 .result-date {
@@ -462,8 +568,22 @@ html {
     color: #0e0e0e;
     padding: 0.1rem 0.6rem;
     border-radius: 999px;
+    justify-content: center;
 }
 
+.results .result-item .result-img-wrap {
+    position: relative;
+    min-height: 170px;
+    overflow: hidden;
+}
+
+.results .result-item .result-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .change {
     display: block;
     font-size: 0.8rem;
@@ -524,6 +644,30 @@ html {
     border-radius: 999px;
     background: #c3f00c;
     color: #00025d;
+}
+.discount-badge {
+    align-self: flex-start;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    background: #e8342a;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.result-was { margin-left: 0.4rem; color: #6b7280; font-size: 0.85rem; }
+.result-save { font-size: 0.8rem; color: #3B6D11; font-weight: 600; }
+
+.discount-note { 
+    font-size: 0.85rem; 
+    color: #000000; 
+    font-style: italic; 
+    background: #cb6205;  
+    padding: 5px 65px; 
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
 }
 
 

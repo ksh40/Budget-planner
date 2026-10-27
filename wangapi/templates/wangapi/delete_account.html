@@ -1,0 +1,24 @@
+{% extends 'plan/base.html' %}
+{% block title %}Delete account | UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'wangapi_profile' %}" class="back-btn">← Back</a>
+
+<div class="container wn-auth">
+    <h1>Delete account</h1>
+    <p class="wn-lead">This permanently deletes your account and everything you've saved. You can't undo it.</p>
+    <form method="post" class="wn-form">
+        {% csrf_token %}
+        <label for="id_password">Enter your password to confirm</label>
+        <div class="wn-pass">
+            <input type="password" name="password" id="id_password" autocomplete="current-password" required autofocus>
+            <button type="button" class="wn-eye" data-toggle-pass aria-pressed="false" aria-label="Show password">
+                <svg class="wn-eye-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="wn-eye-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+        </div>
+        {% if error %}<p class="wn-error">{{ error }}</p>{% endif %}
+        <button type="submit" class="wn-submit wn-submit-danger">Delete my account</button>
+    </form>
+    <p class="wn-alt"><a href="{% url 'wangapi_profile' %}">Keep my account</a></p>
+</div>
+{% endblock %}

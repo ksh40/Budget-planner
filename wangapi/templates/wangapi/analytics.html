@@ -1,0 +1,43 @@
+{% extends 'plan/base.html' %}
+{% block title %}Analytics | UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
+
+<div class="container wn-analytics">
+    <h1>Analytics</h1>
+
+    <div class="wn-tiles">
+        <div class="wn-tile">
+            <span class="wn-tile-label">Accounts</span>
+            <span class="wn-tile-num">{{ accounts_total }}</span>
+            <span class="wn-tile-sub">{{ wangapi_accounts }} Wangapi, {{ evently_accounts }} Evently</span>
+        </div>
+        <div class="wn-tile">
+            <span class="wn-tile-label">New accounts</span>
+            <span class="wn-tile-num">{{ new_accounts }}</span>
+            <span class="wn-tile-sub">in the last 7 days</span>
+        </div>
+        <div class="wn-tile">
+            <span class="wn-tile-label">Events</span>
+            <span class="wn-tile-num">{{ events_total }}</span>
+            <span class="wn-tile-sub">{{ evently_events }} Evently, {{ eventful_events }} Eventful</span>
+        </div>
+        <div class="wn-tile">
+            <span class="wn-tile-label">Saved posts</span>
+            <span class="wn-tile-num">{{ saves_total }}</span>
+            <span class="wn-tile-sub">across all modes</span>
+        </div>
+    </div>
+
+    <h2>Most saved posts</h2>
+    {% if top %}
+        <ol class="wn-top">
+            {% for t in top %}
+                <li><span>{{ t.name }}{% if t.place %} <small>{{ t.place }}</small>{% endif %}</span><span class="wn-top-n">{{ t.saves }}</span></li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p class="wn-empty">Nothing has been saved yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

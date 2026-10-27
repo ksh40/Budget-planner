@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import Eventful
 from django.db.models import Q
 from django.utils import timezone
-
+from wangapi.utils import attach_bookmarks
 
 def eventful_home_view(request):
     amount, show_all = get_budget(request)
@@ -14,7 +14,9 @@ def eventful_home_view(request):
         )
     eventful = upcoming if show_all else upcoming.filter(price__lte=amount)
 
-    results = [{'name': e.name, 
+    results = [{'pk': e.pk,
+                'kind': e._meta.label_lower,
+                'name': e.name, 
                 'price': e.price, 
                 'place': e.location,
                 'description': e.description,
@@ -28,7 +30,8 @@ def eventful_home_view(request):
                 'tickets':e.tickets,
                 'change': amount - e.price} for e in eventful]
     results.sort(key=lambda r: r['price'] if show_all else r['change'])
-    
+    attach_bookmarks(request.user, results)
+
     return render(request, 'eventful/home.html', {
         'amount': amount, 'show_all': show_all, 'results': results,
     })

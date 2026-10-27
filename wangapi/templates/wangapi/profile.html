@@ -1,0 +1,54 @@
+{% extends 'plan/base.html' %}
+{% block title %}Profile | UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
+
+<div class="container wn-profile">
+    <div class="wn-who">
+        {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Your profile picture" class="wn-big">
+        {% else %}
+            <span class="wn-big wn-initial" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
+        {% endif %}
+        <div class="wn-who-text">
+            <h1 style="font-size: 3rem;font-family: Tektur, sans-serif;">{{ user.username }}</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label class="wn-link" for="wn-pic">Change picture</label>
+                <input type="file" id="wn-pic" name="profile_picture" accept="image/*" hidden data-autosubmit>
+                {% for error in form.profile_picture.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+            </form>
+        </div>
+    </div>
+
+    <hr class="wn-line">
+
+    <div class="wn-head">
+        <h2>Marking Your Territory</h2>
+        {% if items %}<button type="button" class="wn-edit" id="wn-edit">Edit</button>{% endif %}
+    </div>
+
+    {% if items %}
+        <ul class="wn-saved" id="wn-saved">
+            {% for i in items %}
+                <li class="wn-card">
+                    <div class="wn-card-img">
+                        {% if i.image %}<img src="{{ i.image.url }}" alt="{{ i.name }}">{% endif %}
+                    </div>
+                    <div class="wn-card-body">
+                        <div class="wn-card-text">
+                            <strong>{{ i.name }}</strong>
+                            {% if i.place %}<span class="wn-card-place">{{ i.place }}</span>{% endif %}
+                            {% if i.price != None %}<span>KSH {{ i.price|floatformat:2 }}</span>{% endif %}
+                        </div>
+                        <button type="button" class="wn-remove" data-kind="{{ i.kind }}" data-pk="{{ i.pk }}">Remove</button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <p class="wn-empty" id="wn-empty" hidden>Nothing saved yet. Tap Hmmmmmm🤔 on any post to save it.</p>
+    {% else %}
+        <p class="wn-empty">Nothing saved yet. Tap Hmmmmmm🤔 on any post to save it.</p>
+    {% endif %}
+</div>
+{% endblock %}

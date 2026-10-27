@@ -9,7 +9,7 @@ from core.views import home_view as evently_home_view
 
 urlpatterns = [
     #Evently
-    path('admin/', admin.site.urls),
+    path('helter/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('events/', include('events.urls')),
     path('search/', include('search.urls')),
@@ -22,11 +22,13 @@ urlpatterns = [
     path('activities/', include('activities.urls')),
     path('eventful/', include('eventful.urls')),
     path('punguza/', include('punguza.urls')),
+    path('students/', include('students.urls')),
+    path('wangapi/', include('wangapi.urls')),
 
     path('evently/', evently_home_view, name='home'),   
     path('', include('plan.urls')), 
 
-    re_path(r'^media/(?P<path>(?:food_items|activities|eventful|event_banners|profiles)/.*)$',
+    re_path(r'^media/(?P<path>(?:food_items|activities|eventful|punguza|students|event_banners|profiles)/.*)$',
         serve, {'document_root': settings.MEDIA_ROOT}),
 ] 
 if settings.DEBUG:

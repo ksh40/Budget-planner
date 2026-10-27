@@ -1,0 +1,70 @@
+<div id="wn-root" class="wn-root"
+     data-auth="{% if user.is_authenticated %}1{% else %}0{% endif %}"
+     data-toggle-url="{% url 'wangapi_toggle' %}"
+     data-register-url="{% url 'wangapi_register' %}"
+     data-csrf="{{ csrf_token }}">
+    {% if user.is_authenticated %}
+        <button type="button" class="wn-user" id="wn-user" aria-haspopup="true" aria-expanded="false">
+            {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" alt="" class="wn-avatar">
+            {% else %}
+                <span class="wn-avatar wn-initial" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
+            {% endif %}
+            <span class="wn-name">{{ user.username }}</span>
+            <span aria-hidden="true">▾</span>
+        </button>
+        <div class="wn-menu" id="wn-menu" hidden>
+            <a href="{% url 'wangapi_profile' %}">My profile</a>
+            {% if user.is_staff %}
+                <a href="{% url 'wangapi_analytics' %}">Analytics</a>
+                <a href="/helter/">Admin panel</a>
+            {% endif %}
+            <hr>
+            <form method="post" action="{% url 'wangapi_logout' %}">
+                {% csrf_token %}
+                <button type="submit">Log out</button>
+            </form>
+            {% if not user.is_staff %}
+                <a href="{% url 'wangapi_delete' %}" class="wn-danger">Delete account</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <a href="{% url 'wangapi_login' %}?next={{ request.get_full_path|urlencode }}" class="wn-signin">Sign in / Register</a>
+    {% endif %}
+    <div class="wn-toast" id="wn-toast" role="status" hidden>
+        <span class="wn-toast-text"></span>
+        <a href="{% url 'wangapi_register' %}" id="wn-toast-link">Sign up</a>
+    </div>
+</div>
+
+
+<nav class="mobile-nav">
+    <a href="{% url 'homeplan' %}" class="mobile-home" aria-label="Home">
+        <i class="fa-solid fa-house" aria-hidden="true"></i>
+    </a>
+    <a href="{% url 'homeplan' %}" class="mobile-brand" style="font-family: Caveat, cursive;">UkoNaNgapi?</a>
+
+    <button type="button"class="mobile-menu-toggle"
+        id="mobile-menu-toggle"aria-label="Open menu"
+        aria-expanded="false"aria-controls="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu" hidden>
+    <a href="{% url 'wangapi_profile' %}">My profile</a>
+    {% if user.is_staff %}
+        <a href="{% url 'wangapi_analytics' %}">Analytics</a>   
+        <a href="/helter/">Admin panel</a>
+    {% endif %}
+    <hr>
+    <form method="post" action="{% url 'wangapi_logout' %}">
+        {% csrf_token %}
+        <button type="submit">Log out</button>
+    </form>
+    {% if not user.is_staff %}
+        <a href="{% url 'wangapi_delete' %}" class="wn-danger">Delete account</a>
+    {% endif %}
+</div>

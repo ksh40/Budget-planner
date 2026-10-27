@@ -25,6 +25,14 @@
         <button class="mode events" type="button" data-url="{% url 'eventful_home' %}">
             <span class="content">Events</span>
         </button>
+        
+        <button class="mode punguza" type="button" data-url="{% url 'punguza_home' %}">
+            <span class="content">"Nitapunguza" LOL</span>
+        </button> 
+        
+        <button class="mode students" type="button" data-url="{% url 'students_home' %}">
+            <span class="content">Student offers</span>
+        </button> 
 
         <button class="mode recipes" type="button" disabled>
             <span class="content">Recipes</span>
@@ -35,9 +43,7 @@
             <span class="content">Transport</span>
             <span class = "soon">Coming soon</span>
         </button> 
-                <button class="mode punguza" type="button" data-url="{% url 'punguza_home' %}">
-            <span class="content">"Nitapunguza" LOL</span>
-        </button> 
+        
     </div>
 </div>
 {% endblock %}

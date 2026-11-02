@@ -5,6 +5,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
 from core.views import home_view as evently_home_view
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import StaticViewSitemap
 
 
 urlpatterns = [
@@ -24,6 +26,13 @@ urlpatterns = [
     path('punguza/', include('punguza.urls')),
     path('students/', include('students.urls')),
     path('wangapi/', include('wangapi.urls')),
+
+    path(
+    "sitemap.xml",
+    sitemap,
+    {"sitemaps": {"static": StaticViewSitemap}},
+    name="django.contrib.sitemaps.views.sitemap",
+    ),
 
     path('evently/', evently_home_view, name='home'),   
     path('', include('plan.urls')), 

@@ -10,6 +10,3 @@ class Punguza(models.Model):
 
     def __str__(self):
         return f"{self.name} — KSH {self.price}"
-
-    def __str__(self):
-        return self.name

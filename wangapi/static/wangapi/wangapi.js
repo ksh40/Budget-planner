@@ -199,6 +199,83 @@
     document.querySelectorAll('.plan-messages .message').forEach(function (m) {
         setTimeout(function () { m.remove(); }, 6000);
     });
+
+
     
-    
+    function copyLink(url) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(url);
+        }
+        return Promise.reject(new Error('no clipboard'));
+    }
+
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.sh-btn');
+        if (!btn) return;
+
+        
+        var url = btn.dataset.url;
+
+        if (!url) {
+            console.error('Share URL is missing.');
+            return;
+        }
+
+        
+        var card = btn.closest('.result-item');
+        var nameEl = card && card.querySelector('.result-name');
+        var title = nameEl ? nameEl.textContent.trim() : document.title;
+
+        var text = title + ' on UkoNaNgapi?';
+
+        
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: text,
+                url: url
+            }).catch(function () {});
+            return;
+        }
+
+        copyLink(url)
+            .then(function () {
+                showToast('Link copied. Paste it anywhere to share.', false);
+            })
+            .catch(function () {
+                window.prompt('Copy this link:', url);
+            });
+    });
+
+    (function () {
+        var popup = document.getElementById('signup-popup');
+
+        if (!popup) return;
+
+        var closeButtons = popup.querySelectorAll(
+            '.signup-popup-close, .signup-popup-skip'
+        );
+
+        if (!sessionStorage.getItem('signupPopupDismissed')) {
+            setTimeout(function () {
+                popup.hidden = false;
+            }, 1200);
+        }
+
+        function closePopup() {
+            popup.hidden = true;
+            sessionStorage.setItem('signupPopupDismissed', '1');
+        }
+
+        closeButtons.forEach(function (button) {
+            button.addEventListener('click', closePopup);
+        });
+
+        popup.addEventListener('click', function (e) {
+            if (e.target === popup) {
+                closePopup();
+            }
+        });
+    })();
+
 })();

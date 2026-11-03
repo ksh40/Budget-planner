@@ -27,7 +27,7 @@ https://ukonangapi.lol/static/images/uknstudents.jpg
     {% if results %}
         <ul class="results">
             {% for r in results %}
-                <li class="result-item">
+                <li id="post-{{ r.kind }}-{{ r.pk }}" class="result-item">
                     {% if r.image %}
                     <div class="result-img-wrap">
                         <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">
@@ -49,7 +49,7 @@ https://ukonangapi.lol/static/images/uknstudents.jpg
                             </div>
                             {% endif %}
                         </div>
-                        {% include 'wangapi/bookmark_button.html' with kind=r.kind pk=r.pk saved=r.saved count=r.saves %}
+                        {% include 'wangapi/bookmark_button.html' with kind=r.kind pk=r.pk saved=r.saved count=r.saves share_mode='students' share_type='students' %}
                     </div>
                 </li>
             {% endfor %}

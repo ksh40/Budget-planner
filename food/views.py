@@ -2,7 +2,6 @@ from decimal import Decimal, InvalidOperation
 from django.shortcuts import render
 from .models import Item, Bundle
 from plan.utils import get_budget
-from .models import Item, Bundle
 from wangapi.utils import attach_bookmarks
 
 def food_home_view(request):

@@ -7,6 +7,7 @@ from django.shortcuts import render
 from core.views import home_view as evently_home_view
 from django.contrib.sitemaps.views import sitemap
 from .sitemaps import StaticViewSitemap
+from wangapi.share_views import share_post_view
 
 
 urlpatterns = [
@@ -32,6 +33,12 @@ urlpatterns = [
     sitemap,
     {"sitemaps": {"static": StaticViewSitemap}},
     name="django.contrib.sitemaps.views.sitemap",
+    ),
+
+    path(
+    'share/<str:mode>/<str:post_type>/<int:pk>/',
+    share_post_view,
+    name='share_post',
     ),
 
     path('evently/', evently_home_view, name='home'),   

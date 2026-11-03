@@ -68,6 +68,27 @@
     </nav>
         <p style="padding-top: 5px;">© 2026 UkoNaNgapi? — What You Can Get With Your Budget In Nairobi.</p>
     </footer>
+
+    {% if not user.is_authenticated %}
+    <div id="signup-popup" class="signup-popup-overlay" hidden>
+        <div class="signup-popup" role="dialog"
+            aria-modal="true" aria-labelledby="signup-title">
+
+            <button type="button" class="signup-popup-close"
+                    aria-label="Close popup">&times;</button>
+
+            <h2 id="signup-title">Usijistress!</h2>
+            <p>Join UkoNaNgapi and mark your favourite finds.</p>
+
+            <a href="{% url 'wangapi_register' %}" class="signup-popup-button">Create an account</a>
+            <p class="signup-popup-login">
+                Already registered?<a href="{% url 'wangapi_login' %}">Sign in</a></p>
+
+            <button type="button" class="signup-popup-skip">Maybe later</button>
+        </div>
+    </div>
+    {% endif %}
+
     {% block scripts %}{% endblock %}
     <script src="{% static 'wangapi/wangapi.js' %}" defer></script>
 </body>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>{{ title }}</title>
+
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:image" content="{{ image_url }}">
+    <meta property="og:url" content="{{ share_url }}">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title }}">
+    <meta name="twitter:description" content="{{ description }}">
+    <meta name="twitter:image" content="{{ image_url }}">
+
+    <script>
+        window.location.replace("{{ destination_url|escapejs }}");
+    </script>
+</head>
+
+<body>
+    <p>Taking you to UkoNaNgapi?</p>
+    <a href="{{ destination_url }}">Click here if you are not redirected.</a>
+</body>
+</html>

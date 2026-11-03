@@ -173,7 +173,14 @@
     border: 2px solid #ff0000;
 }
 .wn-policy-body p { margin: 0 0 0.6rem; }
-.wn-form .wn-check { display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.4rem; font-size: 0.85rem; font-weight: 500; }
+.wn-form .wn-check { 
+    display: flex; 
+    align-items: flex-start; 
+    gap: 0.5rem; 
+    margin-top: 0.4rem; 
+    font-size: 0.85rem; 
+    font-weight: 500; 
+}
 .wn-check input { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 0.1rem; accent-color: #639922; }
 
 
@@ -340,6 +347,99 @@
 .wn-eye:hover { background: #eaf3de; }
 .wn-eye:focus-visible { outline: 2px solid #639922; outline-offset: 1px; }
 .wn-pass input::-ms-reveal { display: none; }
+
+.bm-bar { display: flex; width: 100%; border-top: 1px solid rgba(0, 0, 0, 0.08); }
+.bm-bar .bm-btn { flex: 1; width: auto; border-top: 0; }
+.sh-btn {
+    flex: 0 0 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0;
+    background: #f9dbb2;
+    color: #e07313;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.sh-btn:hover { background: #fcc360; }
+.sh-btn:focus-visible { outline: 2px solid #995822; outline-offset: -2px; }
+
+
+
+
+.signup-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+}
+
+.signup-popup-overlay[hidden] {
+    display: none;
+}
+
+.signup-popup {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 35px 25px;
+    border-radius: 20px;
+    background: rgba(227, 172, 105, 0.93);;
+    color: #e00000;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+.signup-popup h2 {
+    margin-top: 5px;
+    font-size: 28px;
+}
+
+.signup-popup p {
+    line-height: 1.6;
+}
+
+.signup-popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.signup-popup-button {
+    display: block;
+    margin: 22px auto 12px;
+    padding: 13px 20px;
+    border-radius: 10px;
+    background: #358440;
+    color: rgb(196, 193, 193);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.signup-popup-login a {
+    color: #176b87;
+    font-weight: bold;
+}
+
+.signup-popup-skip {
+    border: none;
+    background: none;
+    color: #ff0000;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 8px;
+}
 
 
 .mobile-nav {

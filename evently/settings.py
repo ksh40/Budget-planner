@@ -148,6 +148,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com'
     "https://*.vercel.app", 
     "https://ukonangapi.lol", 
-    "https://www.ukonangapi.lol"
+    "https://www.ukonangapi.lol",
     ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

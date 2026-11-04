@@ -350,6 +350,7 @@
 
 .bm-bar { display: flex; width: 100%; border-top: 1px solid rgba(0, 0, 0, 0.08); }
 .bm-bar .bm-btn { flex: 1; width: auto; border-top: 0; }
+
 .sh-btn {
     flex: 0 0 44px;
     display: flex;
@@ -366,6 +367,32 @@
 .sh-btn:hover { background: #fcc360; }
 .sh-btn:focus-visible { outline: 2px solid #995822; outline-offset: -2px; }
 
+.copy-message {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+
+    background: #16a34a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    white-space: nowrap;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.copy-message.show {
+    opacity: 1;
+    visibility: visible;
+}
 
 
 

@@ -55,7 +55,7 @@ def share_post_view(request, mode, post_type, pk):
     image_url = (
         request.build_absolute_uri(image.url)
         if image
-        else request.build_absolute_uri('/static/images/ukopreview.jpg')
+        else request.build_absolute_uri('/static/plan/images/ukopreview.jpg')
     )
 
 

@@ -1,4 +1,70 @@
 (function () {
+
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.sh-btn');
+        if (!btn) return;
+
+        var url = btn.dataset.url;
+
+        if (!url) {
+            console.error('Share URL is missing.');
+            return;
+        }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(
+                new URL(url, window.location.href).href
+            )
+            .then(function () {
+                showCopyMessage(btn);
+            })
+            .catch(function (error) {
+                console.error('Copy failed:', error);
+                window.prompt('Copy this link:', url);
+            });
+        } else {
+            window.prompt('Copy this link:', url);
+        }
+    });
+
+    function showCopyMessage(btn) {
+        var message = btn.querySelector('.copy-message');
+
+        if (!message) return;
+
+        message.textContent = 'Link copied!';
+        message.classList.add('show');
+
+        setTimeout(function () {
+            message.classList.remove('show');
+        }, 2000);
+    }
+
+    function scrollToPost() {
+        if (!window.location.hash) return;
+
+        var id = decodeURIComponent(
+            window.location.hash.substring(1)
+        );
+
+        var target = document.getElementById(id);
+
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', scrollToPost);
+    } else {
+        scrollToPost();
+    }
+
+})();
+(function () {
     var root = document.getElementById('wn-root');
     if (!root) return;
 
@@ -200,52 +266,6 @@
         setTimeout(function () { m.remove(); }, 6000);
     });
 
-
-    
-    function copyLink(url) {
-        if (navigator.clipboard && window.isSecureContext) {
-            return navigator.clipboard.writeText(url);
-        }
-        return Promise.reject(new Error('no clipboard'));
-    }
-
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('.sh-btn');
-        if (!btn) return;
-
-        
-        var url = btn.dataset.url;
-
-        if (!url) {
-            console.error('Share URL is missing.');
-            return;
-        }
-
-        
-        var card = btn.closest('.result-item');
-        var nameEl = card && card.querySelector('.result-name');
-        var title = nameEl ? nameEl.textContent.trim() : document.title;
-
-        var text = title + ' on UkoNaNgapi?';
-
-        
-        if (navigator.share) {
-            navigator.share({
-                title: title,
-                text: text,
-                url: url
-            }).catch(function () {});
-            return;
-        }
-
-        copyLink(url)
-            .then(function () {
-                showToast('Link copied. Paste it anywhere to share.', false);
-            })
-            .catch(function () {
-                window.prompt('Copy this link:', url);
-            });
-    });
 
     (function () {
         var popup = document.getElementById('signup-popup');

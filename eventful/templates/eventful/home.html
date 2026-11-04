@@ -45,7 +45,7 @@ https://ukonangapi.lol/static/plan/images/uknevent.jpg
     {% if results %}
         <ul class="results">
             {% for r in results %}
-                <li id="event-{{ r.kind }}-{{ r.pk }}" class="result-item">
+                <li id="post-{{ r.kind }}-{{ r.pk }}" class="result-item">
                     {% if r.image %}
                     <div class="result-img-wrap">
                         <img src="{{ r.image.url }}" alt="{{ r.name }}" class="result-img">

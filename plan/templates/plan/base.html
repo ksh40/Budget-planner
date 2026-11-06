@@ -76,7 +76,8 @@
         <p style="padding-top: 5px;">© 2026 UkoNaNgapi? — What You Can Get With Your Budget In Nairobi.</p>
     </footer>
 
-    {% if not user.is_authenticated %}
+    {% if not user.is_authenticated and request.resolver_match.url_name != 'wangapi_register' and request.resolver_match.url_name != 'wangapi_login' %}
+    {% block signup_popup %}
     <div id="signup-popup" class="signup-popup-overlay" hidden>
         <div class="signup-popup" role="dialog"
             aria-modal="true" aria-labelledby="signup-title">
@@ -94,6 +95,7 @@
             <button type="button" class="signup-popup-skip">Maybe later</button>
         </div>
     </div>
+    {% endblock %}
     {% endif %}
 
     {% block scripts %}{% endblock %}

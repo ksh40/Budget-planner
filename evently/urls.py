@@ -27,6 +27,9 @@ urlpatterns = [
     path('punguza/', include('punguza.urls')),
     path('students/', include('students.urls')),
     path('wangapi/', include('wangapi.urls')),
+    path('notifications/', include('notifications.urls')),
+    path('recipes/', include('recipes.urls')),
+
 
     path(
     "sitemap.xml",

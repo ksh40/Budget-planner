@@ -1,0 +1,32 @@
+{% extends 'plan/base.html' %}
+{% load static %}
+{% block title %}Show off your cooking skills | UkoNaNgapi?{% endblock %}
+{% block body_class %}apply{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'recipes/recipes.css' %}">
+<style>body.apply { background-image: url("{% static 'plan/images/kit.jpg' %}"); }</style>
+{% endblock %}
+{% block content %}
+<a href="{% url 'recipes:list' %}" class="back-btn">← Recipes</a>
+<div class="container rc-page">
+    <h1 class="rc-heading">Show off your cooking skills</h1>
+    {% if chef.status == 'pending' %}
+        <p class="rc-notice">Pending review. We will notify you once you are approved. You can update your links below.</p>
+    {% elif chef.status == 'rejected' %}
+        <p class="rc-notice">Your last submission was not approved.{% if chef.moderator_note %} {{ chef.moderator_note }}{% endif %} Update your links and submit again.</p>
+    {% endif %}
+    <form method="post" class="rc-form">
+        {% csrf_token %}
+        <p style="color: darkgreen;">Before posting for the 1st time, add at least one link. 
+            It will appear on your profile + to show you a real person.</p>
+        {% for e in form.non_field_errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+        {% for field in form %}
+            <div class="rc-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for e in field.errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="rc-btn">Submit for review</button>
+    </form>
+</div>
+{% endblock %}

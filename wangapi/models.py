@@ -5,7 +5,7 @@ from accounts.models import User
 
 
 class Bookmark(models.Model):
-    """One saved post. 'kind' is the model label, e.g. 'food.item'."""
+    
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -30,7 +30,7 @@ class Bookmark(models.Model):
 
 
 class WangapiAccount(User):
-    """Admin-only view of the accounts created through Wangapi."""
+   
 
     class Meta:
         proxy = True

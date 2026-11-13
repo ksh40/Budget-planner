@@ -1,54 +1,151 @@
 {% extends 'plan/base.html' %}
-{% block title %}Profile | UkoNaNgapi?{% endblock %}
+{% load static %}
+{% block title %}{{ owner.username }} | UkoNaNgapi?{% endblock %}
+{% block body_class %}profile-page{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'recipes/recipes.css' %}">
+<style>body.profile-page { background-image: url("{% static 'plan/images/tow.jpg' %}"); }</style>
+{% endblock %}
 {% block content %}
 <a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
 
 <div class="container wn-profile">
     <div class="wn-who">
         {% if profile.profile_picture %}
-            <img src="{{ profile.profile_picture.url }}" alt="Your profile picture" class="wn-big">
+            <img src="{{ profile.profile_picture.url }}" alt="{% if is_owner %}Your profile picture{% else %}Profile picture of {{ owner.username }}{% endif %}" class="wn-big">
         {% else %}
-            <span class="wn-big wn-initial" aria-hidden="true">{{ user.username|slice:":1"|upper }}</span>
+            <span class="wn-big wn-initial" aria-hidden="true">{{ owner.username|slice:":1"|upper }}</span>
         {% endif %}
         <div class="wn-who-text">
-            <h1 style="font-size: 3rem;font-family: Tektur, sans-serif;">{{ user.username }}</h1>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <label class="wn-link" for="wn-pic">Change picture</label>
-                <input type="file" id="wn-pic" name="profile_picture" accept="image/*" hidden data-autosubmit>
-                {% for error in form.profile_picture.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
-            </form>
+            <h1 style="font-size: 3rem;font-family: Tektur, sans-serif;">{{ owner.username }}</h1>
+            {% if is_owner %}
+                <div class="wn-actions">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label class="wn-btn" for="wn-pic">Change picture</label>
+                        <input type="file" id="wn-pic" name="profile_picture" accept="image/*" hidden data-autosubmit>
+                        {% for error in form.profile_picture.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+                    </form>
+
+                    <details class="rc-rename"{% if username_form.errors %} open{% endif %}>
+                        <summary class="wn-btn">Change username</summary>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="username">
+                            <label for="wn-username" class="rc-sr">New username</label>
+                            <input id="wn-username" name="username" value="{{ username_form.username.value|default_if_none:'' }}" maxlength="30" required>
+                            <button type="submit" class="rc-btn">Save</button>
+                            {% for error in username_form.username.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+                        </form>
+                    </details>
+
+                    <a class="wn-btn" href="{% url 'wangapi_security' %}">Account security</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 
+    {% if chef_links %}
+        <div class="rc-socials">
+            {% for label, url in chef_links %}<a class="rc-social" href="{{ url }}" target="_blank" rel="noopener noreferrer nofollow">{{ label }}</a>{% endfor %}
+        </div>
+    {% endif %}
+
     <hr class="wn-line">
 
-    <div class="wn-head">
-        <h2>Marking Your Territory</h2>
-        {% if items %}<button type="button" class="wn-edit" id="wn-edit">Edit</button>{% endif %}
-    </div>
+    <div data-tabs>
+        <div class="rc-tabbar">
+            <div class="rc-tabs" role="tablist" aria-label="Profile sections">
+                <button type="button" class="rc-tab" role="tab" id="tab-recipes" aria-controls="panel-recipes"
+                        aria-selected="{% if default_tab == 'recipes' %}true{% else %}false{% endif %}"
+                        tabindex="{% if default_tab == 'recipes' %}0{% else %}-1{% endif %}">Recipes</button>
+                {% if show_bookmarks %}
+                    <button type="button" class="rc-tab" role="tab" id="tab-saved" aria-controls="panel-saved"
+                            aria-selected="{% if default_tab == 'saved' %}true{% else %}false{% endif %}"
+                            tabindex="{% if default_tab == 'saved' %}0{% else %}-1{% endif %}">Bookmarks</button>
+                {% endif %}
+            </div>
+            {% if is_owner %}
+                <form method="post" class="rc-privacy">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="privacy">
+                    <label><input type="checkbox" name="bookmarks_public" data-autosubmit-toggle{% if profile.bookmarks_public %} checked{% endif %}> Bookmarks {% if profile.bookmarks_public %}public{% else %}private{% endif %}</label>
+                </form>
+            {% endif %}
+        </div>
 
-    {% if items %}
-        <ul class="wn-saved" id="wn-saved">
-            {% for i in items %}
-                <li class="wn-card">
-                    <div class="wn-card-img">
-                        {% if i.image %}<img src="{{ i.image.url }}" alt="{{ i.name }}">{% endif %}
+        <div id="panel-recipes" role="tabpanel" aria-labelledby="tab-recipes"{% if default_tab != 'recipes' %} hidden{% endif %}>
+            {% if my_recipes %}
+                {% for recipe in my_recipes %}
+                <div class="wn-saved-recipes">
+                    {% include 'recipes/_card.html' with show_status=is_owner %}
+                </div>
+                {% endfor %}
+                {% if is_owner and chef_ok %}<a class="rc-btn" href="{% url 'recipes:create' %}">Post another recipe</a>{% endif %}
+            {% elif is_owner %}
+                {% if chef_ok %}
+                    <p class="wn-empty">No recipes yet.</p>
+                    <a class="rc-btn" href="{% url 'recipes:create' %}">Post your first recipe</a>
+                {% elif chef %}
+                    <p class="wn-empty">Your cooking profile is {{ chef.get_status_display|lower }}.</p>
+                    <a class="rc-btn" href="{% url 'recipes:apply' %}">View status</a>
+                {% else %}
+                    <p class="wn-empty">Share your recipes with Nairobi.</p>
+                    <a class="rc-btn" href="{% url 'recipes:apply' %}">Wanna show off ur cooking skills</a>
+                {% endif %}
+            {% else %}
+                <p class="wn-empty">No recipes yet.</p>
+            {% endif %}
+        </div>
+
+        {% if show_bookmarks %}
+            <div id="panel-saved" role="tabpanel" aria-labelledby="tab-saved"{% if default_tab != 'saved' %} hidden{% endif %}>
+                <div class="wn-head">
+                    <h2>Marking Your Territory</h2>
+                    {% if is_owner and items %}<button type="button" class="wn-edit" id="wn-edit">Edit</button>{% endif %}
+                </div>
+
+                {% if items %}
+                    <ul class="wn-saved" id="wn-saved">
+                        {% for i in items %}
+                            <li class="wn-card">
+                                <div class="wn-card-img">
+                                    {% if i.image %}<img src="{{ i.image.url }}" alt="{{ i.name }}">{% endif %}
+                                </div>
+                                <div class="wn-card-body">
+                                    <div class="wn-card-text">
+                                        <strong>{{ i.name }}</strong>
+                                        {% if i.place %}<span class="wn-card-place">{{ i.place }}</span>{% endif %}
+                                        {% if i.price != None %}<span>KSH {{ i.price|floatformat:2 }}</span>{% endif %}
+                                        {% if i.links %}
+                                            <span class="wn-card-links">
+                                                {% for label, url in i.links %}<a href="{{ url }}" target="_blank" rel="noopener noreferrer nofollow">{{ label }}</a>{% endfor %}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    {% if is_owner %}
+                                        <button type="button" class="wn-remove" data-kind="{{ i.kind }}" data-pk="{{ i.pk }}">Remove</button>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if saved_recipes %}
+                    <div class="wn-saved-recipes">
+                        <h3 class="rc-subhead">#goodeats</h3>
+
+                        {% for recipe in saved_recipes %}
+                            {% include 'recipes/_card.html' with show_status=False %}
+                        {% endfor %}
                     </div>
-                    <div class="wn-card-body">
-                        <div class="wn-card-text">
-                            <strong>{{ i.name }}</strong>
-                            {% if i.place %}<span class="wn-card-place">{{ i.place }}</span>{% endif %}
-                            {% if i.price != None %}<span>KSH {{ i.price|floatformat:2 }}</span>{% endif %}
-                        </div>
-                        <button type="button" class="wn-remove" data-kind="{{ i.kind }}" data-pk="{{ i.pk }}">Remove</button>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-        <p class="wn-empty" id="wn-empty" hidden>Nothing saved yet. Tap Hmmmmmm🤔 on any post to save it.</p>
-    {% else %}
-        <p class="wn-empty">Nothing saved yet. Tap Hmmmmmm🤔 on any post to save it.</p>
-    {% endif %}
+                {% endif %}
+
+                <p class="wn-empty" id="wn-empty"{% if items or saved_recipes %} hidden{% endif %}>Nothing saved yet. Tap Hmmmmmm🤔 on any post to save it.</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
+{% block scripts %}<script src="{% static 'recipes/recipes.js' %}" defer></script>{% endblock %}

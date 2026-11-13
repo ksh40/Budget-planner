@@ -14,6 +14,7 @@ class StaticViewSitemap(Sitemap):
             "eventful_home",
             "punguza_home",
             "students_home",
+            "recipes:list",
         ]
 
     def location(self, item):

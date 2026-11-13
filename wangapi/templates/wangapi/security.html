@@ -1,0 +1,38 @@
+{% extends 'plan/base.html' %}
+{% block title %}Account security | UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'wangapi_profile' %}" class="back-btn">← Profile</a>
+
+<div class="container wn-auth">
+    <h1>Account security</h1>
+    <p class="wn-lead">Set a hint so you can reset your password if you forget it. You can change your password here too.</p>
+    <form method="post" class="wn-form">
+        {% csrf_token %}
+        {% for error in form.non_field_errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_current_password">Current password</label>
+        {% include 'wangapi/_password_input.html' with name='current_password' id='id_current_password' autocomplete='current-password' required=True %}
+        {% for error in form.current_password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_new_password">New password (set new or set current password)</label>
+        {% include 'wangapi/_password_input.html' with name='new_password' id='id_new_password' autocomplete='new-password' %}
+        {% for error in form.new_password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_confirm_password">Confirm new password</label>
+        {% include 'wangapi/_password_input.html' with name='confirm_password' id='id_confirm_password' autocomplete='new-password' %}
+        {% for error in form.confirm_password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_hint_question">Your hint (a question only you can answer){% if not has_hint %} *{% endif %}</label>
+        {% if has_hint %}<p class="wn-hint">Current hint: <strong>{{ hint_question }}</strong>. Leave both hint fields empty to keep it.</p>{% endif %}
+        <input type="text" name="hint_question" id="id_hint_question" maxlength="120" placeholder="e.g. What was my first school called?" value="{{ form.hint_question.value|default:'' }}">
+        {% for error in form.hint_question.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_hint_answer">Answer to your hint</label>
+        <input type="text" name="hint_answer" id="id_hint_answer" maxlength="100" autocomplete="off" autocapitalize="none" value="{{ form.hint_answer.value|default:'' }}">
+        <p class="wn-hint">Pick something only you know. Don't use anything people could find on your social media.</p>
+        {% for error in form.hint_answer.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <button type="submit" class="wn-submit">Save</button>
+    </form>
+</div>
+{% endblock %}

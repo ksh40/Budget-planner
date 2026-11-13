@@ -12,7 +12,7 @@ ALLOWED_HOSTS = [
     "www.ukonangapi.lol",
     "localhost",
     "127.0.0.1",
-    "192.168.100.14",
+    "192.168.100.8",
 ]
 
 INSTALLED_APPS = [
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'punguza',
     'students',
     'wangapi',
+    'notifications',
+    'recipes',
     
 ]   
 
@@ -71,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'notifications.context_processors.nav_notifications',
             ],
         },
     },
@@ -145,7 +148,7 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.onrender.com'
+    'https://*.onrender.com',
     "https://*.vercel.app", 
     "https://ukonangapi.lol", 
     "https://www.ukonangapi.lol",

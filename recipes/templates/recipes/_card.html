@@ -1,0 +1,42 @@
+<article class="result-item rc-card" id="post-recipes.recipe-{{ recipe.pk }}">
+    <div class="result-img-wrap rc-pic">
+        {% with photos=recipe.photos.all %}
+            {% if photos %}
+                <div class="rc-scroll" tabindex="0" role="group" aria-label="Photos of {{ recipe.title }}">
+                    {% for p in photos %}<img src="{{ p.image.url }}" alt="{{ recipe.title }}{% if not forloop.first %}, photo {{ forloop.counter }}{% endif %}" loading="lazy">{% endfor %}
+                </div>
+                {% if photos|length > 1 %}
+                    <button type="button" class="rc-nav rc-prev" aria-label="Previous photo">‹</button>
+                    <button type="button" class="rc-nav rc-next" aria-label="Next photo">›</button>
+                    <div class="rc-dots">{% for p in photos %}<button type="button" class="rc-dot{% if forloop.first %} on{% endif %}" aria-label="Show photo {{ forloop.counter }}"></button>{% endfor %}</div>
+                {% endif %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <div class="result-body has-bm">
+        <div class="result-content">
+            <strong class="result-name">{{ recipe.title }}</strong>
+            <a class="result-place rc-chef" href="{% url 'wangapi_user' recipe.chef.user.username %}">Prepared by {{ recipe.chef.name }}</a>
+            <span class="rc-price">KSH {{ recipe.price }} (ESTIMATED) <span class="rc-meal">· {{ recipe.get_meal_type_display }} · {{ recipe.get_skill_level_display }}</span></span>
+            {% if show_change %}<span class="change">KSH {{ recipe.change|floatformat:2 }} left over</span>{% endif %}
+            {% if show_status and recipe.status != 'approved' %}
+                <p class="rc-status">{{ recipe.get_status_display }}{% if recipe.moderator_note %}: {{ recipe.moderator_note }}{% endif %}</p>
+            {% endif %}
+            <div class="rc-cols">
+                <section class="rc-col"><h3>Ingredients</h3><ul>{% for line in recipe.ingredient_lines %}<li>{{ line }}</li>{% endfor %}</ul></section>
+                <section class="rc-col"><h3>Instructions</h3><ol>{% for line in recipe.instruction_lines %}<li>{{ line }}</li>{% endfor %}</ol></section>
+                {% if recipe.has_tips %}<section class="rc-col"><h3>Tips and FAQs</h3><p>{{ recipe.tips|linebreaksbr }}</p></section>{% endif %}
+            </div>
+            <p class="rc-time">Cooking time: {{ recipe.cooking_time }}</p>
+            {% if recipe.status == 'approved' and recipe.chef.user_id != request.user.id %}
+                <a class="rc-report" href="{% url 'recipes:report' recipe.pk %}">Report this recipe</a>
+            {% endif %}
+            {% if show_status %}
+                <p class="rc-owner"><a href="{% url 'recipes:edit' recipe.pk %}">Edit</a> <a href="{% url 'recipes:delete' recipe.pk %}" class="rc-danger">Delete</a></p>
+            {% endif %}
+        </div>
+        {% if recipe.status == 'approved' %}
+            {% include 'wangapi/bookmark_button.html' with kind='recipes.recipe' pk=recipe.pk saved=recipe.saved count=recipe.saves share_mode='recipes' share_type='recipe' %}
+        {% endif %}
+    </div>
+</article>

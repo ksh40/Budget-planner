@@ -1,0 +1,16 @@
+{% extends 'plan/base.html' %}
+{% load static %}
+{% block title %}Delete recipe | UkoNaNgapi?{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'recipes/recipes.css' %}">{% endblock %}
+{% block content %}
+<a href="{% url 'wangapi_profile' %}" class="back-btn">← Back</a>
+<div class="container rc-page">
+    <h1 class="rc-heading">Delete recipe</h1>
+    <form method="post" class="rc-form">
+        {% csrf_token %}
+        <p>Delete “{{ recipe.title }}”? This also removes its photos and anyone's bookmarks of it. It can't be undone.</p>
+        <button type="submit" class="rc-btn"style="background: #a8221b;" >Yes, delete it</button>
+        <a href="{% url 'wangapi_profile' %}" class="rc-btn" style="text-align: center;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

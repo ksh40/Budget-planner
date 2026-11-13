@@ -1,0 +1,101 @@
+{% extends 'plan/base.html' %}
+{% load static %}
+{% block title %}{% if recipe %}Edit recipe{% else %}Post a recipe{% endif %} | UkoNaNgapi?{% endblock %}
+{% block body_class %}post-recipes{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'recipes/recipes.css' %}">
+<style>body.post-recipes { background-image: url("{% static 'plan/images/kit.jpg' %}"); }</style>
+{% endblock %}
+{% block content %}
+<a href="{% if recipe %}{% url 'wangapi_profile' %}{% else %}{% url 'recipes:list' %}{% endif %}" class="back-btn">← Back</a>
+<div class="container rc-page">
+    <h1 class="rc-heading">{% if recipe %}Edit recipe{% else %}Post a recipe{% endif %}</h1>
+    <form method="post" enctype="multipart/form-data" class="rc-form">
+        {% csrf_token %}
+        <p>Posting as {{ request.user.username }}</p>
+        {% for e in form.non_field_errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+        {% for field in form %}
+            <div class="rc-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {% for e in field.errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+            </div>
+        {% endfor %}
+        {% if recipe and photos %}
+            <fieldset class="rc-field">
+                <legend>Current photos</legend>
+                <div class="rc-photos">
+                    {% for p in photos %}
+                        <label class="rc-photo"><img src="{{ p.image.url }}" alt="Photo {{ forloop.counter }}"><span><input type="checkbox" name="remove_photo" value="{{ p.pk }}"> Remove</span></label>
+                    {% endfor %}
+                </div>
+            </fieldset>
+        {% endif %}
+        <div class="rc-field">
+            <label for="rc-photos">{% if recipe %}Add photos{% else %}Photos{% endif %}</label>
+            <input id="rc-photos" type="file" name="photos" accept="image/*" multiple data-existing="{{ photos|length }}">
+            <small>1 to 4 photos in total, each under 3 MB. The first one is the cover. You can pick more than once.</small>
+            <div id="rc-previews" class="rc-photos"></div>
+            {% for e in photo_errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+        </div>
+        <button type="submit" class="rc-btn">{% if recipe %}Save changes{% else %}Post recipe{% endif %}</button>
+        <small>{% if recipe %}Your changes go live as soon as you save.{% else %} 
+            Other users can report incase of anything.{% endif %}</small>
+    </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+    var input = document.getElementById('rc-photos');
+    var box = document.getElementById('rc-previews');
+    if (!input || !box || !window.DataTransfer) return;
+
+    var MAX = 4;
+    var existing = parseInt(input.dataset.existing, 10) || 0;
+    var files = [];
+
+   
+    function room() {
+        var removed = document.querySelectorAll('input[name="remove_photo"]:checked').length;
+        return Math.max(0, MAX - (existing - removed));
+    }
+
+    function sync() {
+        
+        var dt = new DataTransfer();
+        files.forEach(function (f) { dt.items.add(f); });
+        input.files = dt.files;
+
+        box.innerHTML = '';
+        files.forEach(function (f, i) {
+            var item = document.createElement('div');
+            item.className = 'rc-photo';
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(f);
+            img.onload = function () { URL.revokeObjectURL(img.src); };
+            var rm = document.createElement('button');
+            rm.type = 'button';
+            rm.textContent = 'Remove';
+            rm.addEventListener('click', function () { files.splice(i, 1); sync(); });
+            item.appendChild(img);
+            item.appendChild(rm);
+            box.appendChild(item);
+        });
+    }
+
+    input.addEventListener('change', function () {
+        var tooMany = false;
+        Array.prototype.forEach.call(input.files, function (f) {
+            var dupe = files.some(function (x) {
+                return x.name === f.name && x.size === f.size && x.lastModified === f.lastModified;
+            });
+            if (dupe) return;
+            if (files.length < room()) { files.push(f); } else { tooMany = true; }
+        });
+        sync();
+        if (tooMany) alert('A recipe can have up to ' + MAX + ' photos in total.');
+    });
+})();
+</script>
+{% endblock %}

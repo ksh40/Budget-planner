@@ -18,7 +18,7 @@ https://ukonangapi.lol/static/plan/images/uknevent.jpg
     <p></p>
     <form method="get" class="filter-form">
         <div class="budget-form">
-            <label for="amount">Budget: KSH</label>
+            <label for="amount" class="rc-label">Budget: KSH</label>
             <input type="number" id="amount" name="amount" step="0.01" min="0"
                 placeholder="Uko na?" value="{% if not show_all %}{% if amount %}{{ amount|floatformat:'2u' }}{% endif %}{% endif %}">
             <button type="submit">Go</button>

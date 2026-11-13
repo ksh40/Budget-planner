@@ -23,6 +23,16 @@
         </div>
         <p class="wn-hint">At least 8 characters. There's no email, so keep in mind.</p>
         {% for error in form.password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+                <label for="id_hint_question">Your hint (a question only you can answer)</label>
+        <input type="text" name="hint_question" id="id_hint_question" maxlength="120" required
+               placeholder="e.g. What was my first school called?" value="{{ form.hint_question.value|default:'' }}">
+        {% for error in form.hint_question.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+        <label for="id_hint_answer">Answer to your hint</label>
+        <input type="text" name="hint_answer" id="id_hint_answer" maxlength="100" minlength="2" required
+               autocomplete="off" autocapitalize="none" value="{{ form.hint_answer.value|default:'' }}">
+        <p class="wn-hint">If you forget your password, the hint will grant you access to reset it. Pick something only you know.</p>
+        {% for error in form.hint_answer.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
         
         <details class="wn-policy">
             <summary>Read the privacy policy</summary>

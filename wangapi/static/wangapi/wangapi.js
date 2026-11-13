@@ -117,6 +117,7 @@
     if (userBtn && menu) {
         userBtn.addEventListener('click', function (e) {
             e.stopPropagation();
+            closeNotifs();  
             var opening = menu.hidden;
             menu.hidden = !opening;
             userBtn.setAttribute('aria-expanded', opening ? 'true' : 'false');
@@ -128,8 +129,6 @@
             if (e.key === 'Escape') closeMenu();
         });
     }
-
-
 
     var mobileToggle = document.getElementById('mobile-menu-toggle');
     var mobileMenu = document.getElementById('mobile-menu');
@@ -145,7 +144,7 @@
     if (mobileToggle && mobileMenu) {
         mobileToggle.addEventListener('click', function (e) {
             e.stopPropagation();
-
+            closeNotifs(); 
             var opening = mobileMenu.hidden;
             mobileMenu.hidden = !opening;
 
@@ -173,9 +172,83 @@
             link.addEventListener('click', closeMobileMenu);
         });
     }
+    var notifs = document.getElementById('wn-notifs');
+    var bells = document.querySelectorAll('.wn-bell');
 
+    function closeNotifs() {
+        if (!notifs) return;
+        notifs.hidden = true;
+        bells.forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+    }
 
+    if (notifs && bells.length) {
+        bells.forEach(function (bell) {
+            bell.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var opening = notifs.hidden;
+                closeMenu();
+                closeMobileMenu();
+                notifs.hidden = !opening;
+                bells.forEach(function (b) {
+                    b.setAttribute('aria-expanded', opening ? 'true' : 'false');
+                });
+            });
+        });
+        document.addEventListener('click', function (e) {
+            if (!notifs.contains(e.target)) closeNotifs();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeNotifs();
+        });
+    }
 
+    document.querySelectorAll('[data-autosubmit-toggle]').forEach(function (input) {
+        input.addEventListener('change', function () { input.form.submit(); });
+    });
+
+    document.querySelectorAll('[data-tabs]').forEach(function (group) {
+        var tabs = Array.prototype.slice.call(group.querySelectorAll('[role="tab"]'));
+        function select(tab) {
+            tabs.forEach(function (t) {
+                var on = t === tab;
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+                t.tabIndex = on ? 0 : -1;
+                document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+            });
+        }
+        tabs.forEach(function (tab, i) {
+            tab.addEventListener('click', function () { select(tab); });
+            tab.addEventListener('keydown', function (e) {
+                var next = e.key === 'ArrowRight' ? tabs[i + 1] : e.key === 'ArrowLeft' ? tabs[i - 1] : null;
+                if (next) { select(next); next.focus(); }
+            });
+        });
+    });
+    var markForm = document.querySelector('.wn-notifs-head form');
+    if (markForm) {
+        markForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var btn = markForm.querySelector('button');
+            btn.disabled = true;
+            fetch(markForm.action, {
+                method: 'POST',
+                body: new FormData(markForm),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'same-origin'
+            }).then(function (r) {
+                if (!r.ok) throw r;
+                document.querySelectorAll('.wn-badge').forEach(function (b) { b.remove(); });
+                document.querySelectorAll('.wn-notif.is-unread').forEach(function (n) {
+                    n.classList.remove('is-unread');
+                });
+                bells.forEach(function (b) { b.setAttribute('aria-label', 'Notifications'); });
+                markForm.remove();
+            }).catch(function () {
+                btn.disabled = false;
+                showToast("Couldn't mark as read. Try again.", false);
+            });
+        });
+    }
     function paint(btn, saved, count) {
         btn.classList.toggle('is-saved', saved);
         btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
@@ -265,7 +338,29 @@
     document.querySelectorAll('.plan-messages .message').forEach(function (m) {
         setTimeout(function () { m.remove(); }, 6000);
     });
+    
+    document.querySelectorAll('[data-autosubmit-toggle]').forEach(function (input) {
+        input.addEventListener('change', function () { input.form.submit(); });
+    });
 
+    document.querySelectorAll('[data-tabs]').forEach(function (group) {
+        var tabs = Array.prototype.slice.call(group.querySelectorAll('[role="tab"]'));
+        function select(tab) {
+            tabs.forEach(function (t) {
+                var on = t === tab;
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+                t.tabIndex = on ? 0 : -1;
+                document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+            });
+        }
+        tabs.forEach(function (tab, i) {
+            tab.addEventListener('click', function () { select(tab); });
+            tab.addEventListener('keydown', function (e) {
+                var next = e.key === 'ArrowRight' ? tabs[i + 1] : e.key === 'ArrowLeft' ? tabs[i - 1] : null;
+                if (next) { select(next); next.focus(); }
+            });
+        });
+    });
 
     (function () {
         var popup = document.getElementById('signup-popup');

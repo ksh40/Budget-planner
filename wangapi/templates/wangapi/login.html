@@ -25,6 +25,6 @@
         <button type="submit" class="wn-submit">Sign in</button>
     </form>
     <p class="wn-alt">New here? <a href="{% url 'wangapi_register' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Create an account</a></p>
-    <p class="wn-alt wn-small">Forgot your password? Ask the admin to reset it.</p>
+    <p class="wn-alt wn-small"><a href="{% url 'wangapi_forgot' %}">Forgot your password?</a></p>
 </div>
 {% endblock %}

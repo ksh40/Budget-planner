@@ -1,0 +1,39 @@
+{% extends 'plan/base.html' %}
+{% block title %}Forgot password | UkoNaNgapi?{% endblock %}
+{% block content %}
+<a href="{% url 'wangapi_login' %}" class="back-btn">← Sign in</a>
+
+<div class="container wn-auth">
+    <h1>Forgot password</h1>
+    {% if step == 1 %}
+        <p class="wn-lead">Enter your username. You'll answer your hint to set a new password.</p>
+        <form method="post" class="wn-form">
+            {% csrf_token %}
+            {% if error %}<p class="wn-error">{{ error }}</p>{% endif %}
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username" autocomplete="username" autocapitalize="none" required autofocus>
+            <button type="submit" class="wn-submit">Next</button>
+        </form>
+    {% else %}
+        <p class="wn-lead">Answer your hint, then choose a new password.</p>
+        {% if locked %}<p class="wn-error">Too many wrong answers. Try again in 30 minutes.</p>{% endif %}
+        <form method="post" class="wn-form">
+            {% csrf_token %}
+            <label for="id_answer">Your hint: <strong>{{ question }}</strong></label>
+            <input type="text" name="answer" id="id_answer" autocomplete="off" autocapitalize="none" required autofocus{% if locked %} disabled{% endif %}>
+            {% for error in form.answer.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+            <label for="id_new_password">New password</label>
+            {% include 'wangapi/_password_input.html' with name='new_password' id='id_new_password' autocomplete='new-password' required=True %}
+            {% for error in form.new_password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+            <label for="id_confirm_password">Confirm new password</label>
+            {% include 'wangapi/_password_input.html' with name='confirm_password' id='id_confirm_password' autocomplete='new-password' required=True %}
+            {% for error in form.confirm_password.errors %}<p class="wn-error">{{ error }}</p>{% endfor %}
+
+            <button type="submit" class="wn-submit"{% if locked %} disabled{% endif %}>Set new password</button>
+        </form>
+        <p class="wn-alt wn-small"><a href="?reset=1">Not your account? Start over</a></p>
+    {% endif %}
+</div>
+{% endblock %}

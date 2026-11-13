@@ -1,9 +1,16 @@
+{% with unread=nav_unread.count %}
 <div id="wn-root" class="wn-root"
      data-auth="{% if user.is_authenticated %}1{% else %}0{% endif %}"
      data-toggle-url="{% url 'wangapi_toggle' %}"
      data-register-url="{% url 'wangapi_register' %}"
      data-csrf="{{ csrf_token }}">
     {% if user.is_authenticated %}
+        <button type="button" class="wn-bell" aria-haspopup="true" aria-expanded="false"
+                aria-controls="wn-notifs"
+                aria-label="Notifications{% if unread %}, {{ unread }} unread{% endif %}">
+            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+            {% if unread %}<span class="wn-badge">{% if unread > 9 %}9+{% else %}{{ unread }}{% endif %}</span>{% endif %}
+        </button>
         <button type="button" class="wn-user" id="wn-user" aria-haspopup="true" aria-expanded="false">
             {% if user.profile.profile_picture %}
                 <img src="{{ user.profile.profile_picture.url }}" alt="" class="wn-avatar">
@@ -28,6 +35,48 @@
                 <a href="{% url 'wangapi_delete' %}" class="wn-danger">Delete account</a>
             {% endif %}
         </div>
+        <div class="wn-notifs" id="wn-notifs" hidden>
+        <div class="wn-notifs-head">
+            <strong>Notifications</strong>
+            <div class="wn-notifs-actions">
+                {% if unread %}
+                    <form method="post" action="{% url 'notifications:mark_all_read' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="submit">Mark all read</button>
+                    </form>
+                {% endif %}
+                {% if nav_notifications %}
+                    <form method="post" action="{% url 'notifications:delete_all' %}" class="wn-clear wn-ajax">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="button" class="wn-clear-ask">Clear all</button>
+                        <span class="wn-clear-confirm" hidden>
+                            <span>Delete all?</span>
+                            <button type="submit" class="wn-clear-yes">Yes</button>
+                            <button type="button" class="wn-clear-no">No</button>
+                        </span>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        {% for item in nav_notifications %}
+            <div class="wn-notif-row">
+                <a class="wn-notif{% if not item.is_read %} is-unread{% endif %}"
+                href="{% url 'notifications:open' item.pk %}">
+                    <span class="wn-dot" aria-hidden="true"></span>
+                    <span>{{ item.message }}</span>
+                </a>
+                <form method="post" action="{% url 'notifications:delete' item.pk %}" class="wn-ajax">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <button type="submit" class="wn-notif-del" aria-label="Delete notification">×</button>
+                </form>
+            </div>
+        {% empty %}
+            <p class="wn-notifs-empty">No notifications yet.</p>
+        {% endfor %}
+    </div>
     {% else %}
         <a href="{% url 'wangapi_login' %}?next={{ request.get_full_path|urlencode }}" class="wn-signin">Sign in / Register</a>
     {% endif %}
@@ -43,6 +92,15 @@
         <i class="fa-solid fa-house" aria-hidden="true"></i>
     </a>
     <a href="{% url 'homeplan' %}" class="mobile-brand" style="font-family: Caveat, cursive;">UkoNaNgapi?</a>
+
+    {% if user.is_authenticated %}
+        <button type="button" class="wn-bell" aria-haspopup="true" aria-expanded="false"
+                aria-controls="wn-notifs"
+                aria-label="Notifications{% if unread %}, {{ unread }} unread{% endif %}">
+            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+            {% if unread %}<span class="wn-badge">{% if unread > 9 %}9+{% else %}{{ unread }}{% endif %}</span>{% endif %}
+        </button>
+    {% endif %}
 
     <button type="button"class="mobile-menu-toggle"
         id="mobile-menu-toggle"aria-label="Open menu"
@@ -68,3 +126,67 @@
         <a href="{% url 'wangapi_delete' %}" class="wn-danger">Delete account</a>
     {% endif %}
 </div>
+{% endwith %}
+<script>
+(function () {
+   
+    document.addEventListener('click', function (e) {
+        var form = e.target.closest('.wn-clear');
+        if (!form) return;
+        var ask = form.querySelector('.wn-clear-ask');
+        var box = form.querySelector('.wn-clear-confirm');
+        if (e.target.closest('.wn-clear-ask')) { ask.hidden = true; box.hidden = false; }
+        else if (e.target.closest('.wn-clear-no')) { box.hidden = true; ask.hidden = false; }
+    });
+
+    function setBadge(n) {
+        document.querySelectorAll('.wn-badge').forEach(function (b) {
+            if (n > 0) { b.textContent = n > 9 ? '9+' : n; } else { b.remove(); }
+        });
+    }
+
+    function showEmpty(panel) {
+        if (panel.querySelector('.wn-notifs-empty')) return;
+        var p = document.createElement('p');
+        p.className = 'wn-notifs-empty';
+        p.textContent = 'No notifications yet.';
+        panel.appendChild(p);
+    }
+
+    document.addEventListener('submit', function (e) {
+        var form = e.target;
+        if (!form.matches || !form.matches('.wn-ajax')) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin'
+        })
+        .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+        .then(function (data) {
+            var panel = document.getElementById('wn-notifs');
+            if (form.classList.contains('wn-clear')) {
+                panel.querySelectorAll('.wn-notif-row').forEach(function (r) { r.remove(); });
+                form.remove();
+            } else {
+                var row = form.closest('.wn-notif-row');
+                if (row) row.remove();
+            }
+            if (!panel.querySelector('.wn-notif-row')) {
+                var clear = panel.querySelector('.wn-clear');
+                if (clear) clear.remove();
+                showEmpty(panel);
+            }
+            if (!data.unread) {
+                var mark = panel.querySelector('form[action*="mark-all-read"], form[action*="mark_all_read"]');
+                if (mark) mark.remove();
+            }
+            setBadge(data.unread);
+        })
+        .catch(function () { form.submit(); }); 
+    }, true);
+})();
+</script>

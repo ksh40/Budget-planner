@@ -1,0 +1,594 @@
+.rc-sr {
+    position: absolute;
+    left: -9999px;
+}
+
+.rc-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.rc-heading {
+    font-family: 'Caveat', cursive;
+    font-size: 3.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem; 
+    display: inline-block;
+    background: linear-gradient(-45deg, #ffffff, #42ed53, #f63939, #000000);
+    background-size: 400% 400%;
+    animation: gradientFlow 4s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding: 0 0.2em 0.1em;
+    margin-right: -0.2em;
+}
+
+.rc-toolbar {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 5px 0;
+    padding-left: 100px;
+}
+
+.rc-search {
+    padding-right: 10px;
+  
+}
+
+.rc-budfield {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 999px;
+    padding: 0.4rem 0.5rem 0.4rem 1rem;
+} 
+
+.rc-budfield .rc-label {
+    position: static;
+    transform: none;
+    flex: 0 0 auto;
+    color: #444;
+    font-size: 1rem;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.rc-budfield input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+    width: 110px;
+    text-align: right;
+}
+
+.rc-budfield input:focus {
+    border-left-color: #639922;
+}
+
+.rc-budfield .rc-btn {
+    position: static;
+    transform: none;
+    flex: 0 0 auto;
+    padding: 6px 17px;
+    background: #639922;
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.rc-budfield .rc-btn:hover {
+    background: #4f7e1b;
+}
+
+
+.rc-btn {
+    display: inline-block;
+    align-items: center;
+    background: #639922;
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.45rem 2.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    flex-wrap: wrap; 
+    gap: 0.75rem;  
+    margin-top: 5px;
+}
+
+
+.rc-notice {
+    background: #fff3c4;
+    color: #1d1a17;
+    border-radius: 10px;
+    padding: 12px 16px;
+}
+
+.rc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: rgba(248, 175, 111, 0.93);
+    color: #1a1f36;
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 640px;
+    text-align: left;
+        margin-left: auto;
+    margin-right: auto;
+}
+
+.rc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.rc-field input,
+.rc-field textarea,
+.rc-field select {
+    border: 1px solid #d9cfc2;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 1rem;
+    font-weight: 400;
+    width: 100%;
+}
+
+.rc-field small,
+.rc-form small {
+    font-weight: 400;
+    color: #5b5247;
+}
+
+
+.rc-pic {
+    position: relative;
+    background: #e9dfd2;
+}
+.rc-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rc-nav:hover { 
+    background: rgba(0, 0, 0, .75); 
+}
+.rc-nav[hidden] { display: none; }
+.rc-prev { left: .5rem; }
+.rc-next { right: .5rem; }
+
+.results.rc-stack {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.results .result-item.rc-card .result-img-wrap.rc-pic {
+    flex: 0 0 290px;
+    min-height: 240px;
+}
+.rc-card .result-body {
+    min-width: 0;
+}
+
+.rc-card .result-content {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.rc-scroll {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.rc-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.rc-scroll img {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scroll-snap-align: center;
+}
+
+.rc-dots {
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.rc-dot {
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    padding: 7px;
+    border: 0;
+    border-radius: 50%;
+    background: #00f800;
+    background-clip: content-box;
+    opacity: .7;
+    cursor: pointer;
+}
+
+.rc-dot.on {
+    background-color: #dc7900;
+    opacity: 1;
+}
+
+.rc-chef {
+    color: #b8431f;
+    font-weight: 600;
+}
+
+.rc-price {
+    font-weight: 700;
+}
+
+.rc-meal {
+    font-weight: 700;
+    color: #3f968a;
+}
+
+.rc-status {
+    background: #fff3c4;
+    border-radius: 8px;
+    padding: 6px 12px;
+    margin: 0;
+}
+
+.rc-report {
+    font-size: 0.85rem;
+    background: #e18080;
+    border-radius: 999px;
+    padding: 6px 10px;
+    text-decoration: none;
+    margin-right: 0;
+}
+
+.rc-cols {
+    display: flex;
+    width: 100%;
+    border-top: 1px solid #e3d9cc;
+    border-bottom: 1px solid #e3d9cc;
+    margin: 6px 0;
+}
+
+.rc-col {
+    flex: 1 1 0;
+    padding: 12px 28px;
+    border-left: 1px solid #e3d9cc;
+    line-height: 1.5;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.rc-col:first-child {
+    border-left: 0;
+    padding-left: 0;
+}
+
+.rc-col h3 {
+    margin: 0 0 6px;
+    font-size: .75rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #5b5247;
+}
+
+.rc-col ul,
+.rc-col ol {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.rc-col p {
+    margin: 0;
+}
+
+.rc-time {
+    margin: 0;
+}
+
+.rc-owner {
+    margin: 4px 0 0;
+    display: flex;
+    gap: 16px;
+    font-weight: 600;
+}
+
+.rc-owner a {
+    color: #9e0505;
+}
+
+.rc-filterrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+
+.rc-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.rc-chip {
+    background: #fff;
+    color: #1a1f36;
+    padding: 8px 14px;
+    border-radius: 0;
+    text-decoration: none;
+    font-weight: 600;
+}
+.rc-chip + .rc-chip {
+    border-left: 1px solid #1a1f36;
+}
+.rc-chip[aria-current="true"] {
+    background: #ff4343;
+}
+
+.rc-skillfilter { 
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+.rc-skillfilter select { 
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: #fff;
+    color: #1a1f36;
+    font: inherit;
+    font-weight: 600; 
+}
+
+.rc-pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.rc-pager a {
+    background: #fff;
+    color: #1a1f36;
+    border-radius: 999px;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.rc-photos {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rc-photo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 400;
+    font-size: .9rem;
+}
+
+.rc-photo img {
+    width: 110px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+
+
+.rc-tabbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,.35);
+    margin: 16px 0;
+}
+
+.rc-tabs {
+    display: flex;
+}
+
+.rc-tab {
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    padding: 12px 24px;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.rc-tab[aria-selected="true"] {
+    border-bottom-color: #b8e986;
+    font-weight: 700;
+}
+
+.rc-privacy label {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rc-socials {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+
+.rc-social {
+    background: #fff;
+    color: #1d1a17;
+    border-radius: 999px;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.rc-subhead {
+    color: #fff;
+    margin: 24px 0 12px;
+    border-radius: 20px;
+    background-color: rgb(89, 127, 162);
+}
+
+.rc-rename form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.rc-rename input {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid #d9cfc2;
+}
+
+.wn-card-links a {
+    margin-right: 10px;
+}
+
+@media (max-width: 640px) {
+    .mobile-home  { grid-column: 1; grid-row: 1; }
+    .mobile-brand { grid-column: 2; grid-row: 1; }
+
+    .mobile-nav .mobile-menu-toggle {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .mobile-nav .wn-bell {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        margin-right: 50px;   
+        color: #42ed53;      
+    }
+    .results .result-item.rc-card {
+        flex-direction: column;
+    }
+
+    .results .result-item.rc-card .result-img-wrap.rc-pic {
+        flex: none;
+        width: 100%;
+        height: 220px;
+        min-height: 220px;
+    }
+
+    .rc-cols {
+        flex-direction: column;
+    }
+
+    .rc-col {
+        border-left: 0;
+        border-top: 1px solid #e3d9cc;
+        padding-left: 0;
+    }
+
+    .rc-col:first-child {
+        border-top: 0;
+    }
+    .rc-toolbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding-left: 0;
+    }
+
+    .rc-search {
+        width: 100%;
+        padding-right: 0;
+        display: flex;
+        justify-content: center;
+    }
+    .rc-budfield {
+        width: min(100%, 340px);
+        box-sizing: border-box;
+        min-height: 54px;
+        padding-left: 14px;
+        gap: 6px;
+    }
+
+    .rc-budfield .rc-label {
+        font-size: 0.85rem;
+    }
+
+    .rc-budfield input {
+        flex: 1;
+        width: auto;
+        min-width: 0;        
+        font-size: 0.9rem;
+    }
+
+    .rc-budfield .rc-btn {
+        padding: 10px 18px;
+    }
+    .rc-toolbar > .rc-btn {
+        width: min(100%, 340px);
+        box-sizing: border-box;
+        text-align: center;
+        padding: 0.7rem 1rem;
+    }
+    .rc-chips {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    .rc-chip {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+}

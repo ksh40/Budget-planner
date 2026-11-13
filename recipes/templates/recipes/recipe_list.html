@@ -1,0 +1,70 @@
+{% extends 'plan/base.html' %}
+{% load static %}
+{% block og_title %}Recipes | UkoNaNgapi?{% endblock %}
+{% block og_description %}Cook something within your budget. Recipes with estimated costs from Nairobi home cooks.{% endblock %}
+{% block og_url %}https://www.ukonangapi.lol/recipes/{% endblock %}
+{% block title %}Recipes | UkoNaNgapi?{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'recipes/recipes.css' %}">{% endblock %}
+{% block content %}
+<a href="{% url 'homeplan' %}" class="back-btn">← Home</a>
+<div class="container rc-page">
+    <h1 class="rc-heading">Recipes</h1>
+    <div class="rc-toolbar">
+        <form method="get" class="rc-search" role="search">
+            <div class="rc-budfield">
+                <label for="amount" class="rc-label">Budget: KSH </label>
+                <input id="amount" name="amount" type="number" inputmode="numeric" step="0.01" 
+                min="0" placeholder="Uko na?" value="{% if not show_all %}{% if amount %}{{ amount|floatformat:'2u' }}{% endif %}{% endif %}">
+                {% if meal %}<input type="hidden" name="meal" value="{{ meal }}">{% endif %}
+                {% if skill %}<input type="hidden" name="skill" value="{{ skill }}">{% endif %}
+                <button type="submit" class="rc-btn">Go</button>
+            </div>
+        </form>
+        <a class="rc-btn" style="background: #ca4503;" href="{{ post_url }}">Unajiona mpishi? Post your recipes</a>
+    </div>
+    <a href="{{ show_all_url }}" class="show-all-btn">View All Recipes Without Any Filters</a>
+
+    <div class="rc-filterrow">
+        <nav class="rc-chips" aria-label="Meal type">
+            {% for link in meal_links %}<a class="rc-chip" href="{{ link.url }}"{% if link.active %} aria-current="true"{% endif %}>{{ link.label }}</a>{% endfor %}
+        </nav>
+
+        <form method="get" class="rc-skillfilter">
+            {% for key, value in filter_hidden %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+            <label for="skill" class="rc-label">Skill level:</label>
+            <select id="skill" name="skill" onchange="this.form.submit()">
+                <option value="">All levels</option>
+                {% for value, label in skill_choices %}
+                    <option value="{{ value }}"{% if skill == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <noscript><button type="submit" class="rc-btn">Filter</button></noscript>
+        </form>
+    </div>
+    
+
+    {% if recipes %}
+        <div class="results rc-stack">
+            {% for recipe in recipes %}
+                {% include 'recipes/_card.html' with show_status=False show_change=show_change %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="wn-empty">No recipes found within your budget AS OF NOW.</p>
+    {% endif %}
+
+    {% if page_obj.has_other_pages %}
+        <nav class="rc-pager" aria-label="Pages">
+            {% if page_obj.has_previous %}<a href="{{ page_prefix }}page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}<a href="{{ page_prefix }}page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+        </nav>
+    {% endif %}
+
+    {% if not show_all %}<footer style="font-size: 1rem;font-weight: 300;">
+    <p>Budget: KSH {{ amount|floatformat:2 }} </p>
+    <p>SCROLL BACK UP TO EDIT BUDGET</p>
+    </footer>{% endif %}
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'recipes/recipes.js' %}" defer></script>{% endblock %}

@@ -6,7 +6,16 @@ from .models import Bookmark
 PLACEHOLDER_SUFFIX = '@users.invalid'
 
 
-PLANNER_APPS = {'food', 'activities', 'eventful', 'punguza', 'students'}
+PLANNER_APPS = {'food', 'activities', 'eventful', 'punguza', 'students', 'recipes'}
+RECIPE_KIND = 'recipes.recipe'
+
+SOCIAL_FIELDS = (
+    ('instagram', 'Instagram'),
+    ('tiktok', 'TikTok'),
+    ('twitter', 'Twitter / X'),
+    ('youtube', 'YouTube'),
+    ('website', 'Website'),
+)
 
 
 def get_model_for(kind):
@@ -53,6 +62,25 @@ def attach_bookmarks(user, results):
     return results
 
 
+def decorate_recipes(user, recipes):
+    """Set .saved and .saves on each Recipe so the recipe card can show its bookmark state."""
+    results = [{'kind': RECIPE_KIND, 'pk': r.pk} for r in recipes]
+    attach_bookmarks(user, results)
+    for recipe, res in zip(recipes, results):
+        recipe.saved, recipe.saves = res['saved'], res['saves']
+    return recipes
+
+
+def social_links(obj):
+    """(label, url) pairs for whichever social fields the post has. Only http(s) links count."""
+    links = []
+    for field, label in SOCIAL_FIELDS:
+        url = getattr(obj, field, '') or ''
+        if isinstance(url, str) and url.startswith(('http://', 'https://')):
+            links.append((label, url))
+    return links
+
+
 def card_data(obj):
     """The few fields every post type shares, whatever its model calls them."""
     return {
@@ -60,12 +88,16 @@ def card_data(obj):
         'place': getattr(obj, 'place', None) or getattr(obj, 'location', '') or '',
         'price': getattr(obj, 'price', None),
         'image': getattr(obj, 'image', None),
+        'links': social_links(obj),
     }
 
 
 def saved_items(user):
-    """The user's saved posts, newest first. Bookmarks whose post was deleted are cleaned up."""
-    bookmarks = list(Bookmark.objects.filter(user=user))
+    """The user's saved posts, newest first. Bookmarks whose post was deleted are cleaned up.
+
+    Recipes are left out here: they show as full cards via saved_recipes().
+    """
+    bookmarks = list(Bookmark.objects.filter(user=user).exclude(kind=RECIPE_KIND))
 
     ids_by_kind = defaultdict(list)
     for b in bookmarks:
@@ -92,6 +124,24 @@ def saved_items(user):
     if stale:
         Bookmark.objects.filter(pk__in=stale).delete()
     return items
+
+
+def saved_recipes(viewer, owner):
+    """Recipes the owner bookmarked (live ones only), newest bookmark first."""
+    from recipes.models import Recipe
+
+    ids = list(
+        Bookmark.objects.filter(user=owner, kind=RECIPE_KIND).values_list('object_id', flat=True)
+    )
+    found = {
+        r.pk: r
+        for r in Recipe.objects.live()
+        .filter(pk__in=ids)
+        .select_related('chef__user')
+        .prefetch_related('photos')
+    }
+    ordered = [found[i] for i in ids if i in found]
+    return decorate_recipes(viewer, ordered)
 
 
 def top_saved(limit=5):

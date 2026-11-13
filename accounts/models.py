@@ -2,6 +2,11 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+import re
+from datetime import timedelta
+
+from django.contrib.auth.hashers import check_password, make_password
+from django.utils import timezone
 
 
 def verification_storage():
@@ -71,12 +76,62 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.role == 'attendee'
 
 
+HINT_MAX_TRIES = 5
+HINT_LOCK_MINUTES = 30
+
+
+def _norm(answer):
+    """'  My  Dog ' and 'my dog' count as the same answer."""
+    return re.sub(r'\s+', ' ', answer or '').strip().lower()
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
     location = models.CharField(max_length=100, blank=True)
     interests = models.TextField(blank=True, help_text='Comma-separated interests')
+    bookmarks_public = models.BooleanField(default=False)
+
+    # Password-reset hint
+    hint_question = models.CharField(max_length=120, blank=True)
+    hint_answer_hash = models.CharField(max_length=128, blank=True)
+    hint_failed = models.PositiveSmallIntegerField(default=0)
+    hint_locked_until = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.username} profile'
+
+    @property
+    def has_hint(self):
+        return bool(self.hint_question and self.hint_answer_hash)
+
+    @property
+    def hint_locked(self):
+        return bool(self.hint_locked_until and self.hint_locked_until > timezone.now())
+
+    def set_hint(self, question, answer):
+        self.hint_question = question.strip()
+        self.hint_answer_hash = make_password(_norm(answer))
+        self.hint_failed = 0
+        self.hint_locked_until = None
+        self.save(update_fields=[
+            'hint_question', 'hint_answer_hash', 'hint_failed', 'hint_locked_until',
+        ])
+
+    def check_hint(self, answer):
+        
+        if self.hint_locked or not self.has_hint:
+            return False
+        if check_password(_norm(answer), self.hint_answer_hash):
+            self.hint_failed = 0
+            self.hint_locked_until = None
+            self.save(update_fields=['hint_failed', 'hint_locked_until'])
+            return True
+        self.hint_failed += 1
+        if self.hint_failed >= HINT_MAX_TRIES:
+            self.hint_failed = 0
+            self.hint_locked_until = timezone.now() + timedelta(minutes=HINT_LOCK_MINUTES)
+        self.save(update_fields=['hint_failed', 'hint_locked_until'])
+        return False
+

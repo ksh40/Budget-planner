@@ -1,0 +1,23 @@
+{% extends 'plan/base.html' %}
+{% load static %}
+{% block title %}Report recipe | UkoNaNgapi?{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'recipes/recipes.css' %}">{% endblock %}
+{% block content %}
+<a href="{% url 'recipes:list' %}#recipe-{{ recipe.pk }}" class="back-btn">← Back</a>
+<div class="container rc-page">
+    <h1 class="rc-heading">Report recipe</h1>
+    <form method="post" class="rc-form">
+        {% csrf_token %}
+        <p>You are reporting <strong>{{ recipe.title }}</strong> by {{ recipe.chef.name }}.</p>
+        {% for e in form.non_field_errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+        {% for field in form %}
+            <div class="rc-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for e in field.errors %}<p class="wn-error">{{ e }}</p>{% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="rc-btn">Send report</button>
+    </form>
+</div>
+{% endblock %}

@@ -191,7 +191,7 @@
 }
 
 .results .result-item.rc-card .result-img-wrap.rc-pic {
-    flex: 0 0 350px;
+    flex: 0 0 400px;
     min-height: 300px;
 }
 .rc-card .result-body {
@@ -292,12 +292,13 @@
 
 .rc-col {
     flex: 1 1 0;
-    padding: 12px 28px;
+    padding: 12px 15px;
     border-left: 1px solid #e3d9cc;
     line-height: 1.5;
     min-width: 0;
     overflow-wrap: anywhere;
     word-break: break-word;
+    font-size: 0.9rem;
 }
 
 .rc-col:first-child {
@@ -307,7 +308,7 @@
 
 .rc-col h3 {
     margin: 0 0 6px;
-    font-size: .75rem;
+    font-size: .85rem;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: #5b5247;

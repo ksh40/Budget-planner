@@ -224,6 +224,10 @@
 
 
 .wn-profile { max-width: 760px; }
+.container.wn-profile {
+    max-width: 1100px;
+}
+
 .wn-who { display: flex; align-items: center; gap: 1rem; text-align: left; }
 .wn-who h1 { margin: 0; font-size: 1.6rem; }
 .wn-big { flex: 0 0 84px; width: 84px; height: 84px; border-radius: 50%; object-fit: cover; }
@@ -310,9 +314,9 @@
     list-style: none;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
     gap: 1rem;
-    align-items: start;
+    align-items: stretch;
     text-align: left;
 }
 .wn-saved[hidden] { display: none; }
@@ -323,7 +327,7 @@
     justify-content: flex-start;
     min-width: 0;
     gap: 0.2rem;
-
+    min-height: 150px;
     background: rgba(255, 179, 179, 0.93);
     color: #1a1f36;
 }
@@ -332,7 +336,7 @@
 
 .wn-card-img { 
     position: relative; 
-    flex: 0 0 120px; 
+    flex: 0 0 140px; 
     min-height: 96px; 
     background: rgba(0, 0, 0, 0.05); 
 }
@@ -365,9 +369,12 @@
 
 
 .wn-saved-recipes .rc-card .rc-pic {
-    flex: 0 0 36%;
-    width: 36%;
+    flex: 0 0 45%;
+    width: 45%;
     min-width: 0;
+}
+.container.wn-profile {
+    max-width: 1100px;
 }
 
 .wn-saved-recipes .rc-card .result-body {

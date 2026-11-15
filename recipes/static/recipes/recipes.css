@@ -7,6 +7,9 @@
     max-width: 900px;
     margin: 0 auto;
 }
+.container.rc-page {
+    max-width: 1300px;
+}
 
 .rc-heading {
     font-family: 'Caveat', cursive;
@@ -188,8 +191,8 @@
 }
 
 .results .result-item.rc-card .result-img-wrap.rc-pic {
-    flex: 0 0 290px;
-    min-height: 240px;
+    flex: 0 0 350px;
+    min-height: 300px;
 }
 .rc-card .result-body {
     min-width: 0;

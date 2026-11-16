@@ -110,8 +110,23 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    flex: 1 1 0;
+    min-width: 0;
     gap: 0;
     padding: 0;
+}
+.result-body.has-bm {
+    align-items: stretch;
+}
+
+.result-body.has-bm > :not(.result-content) {
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+}
+
+.result-body.has-bm .bm-bar {
+    width: 100%;
 }
 .result-body.has-bm .result-content {
     flex: 1;

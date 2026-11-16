@@ -163,6 +163,9 @@ h1{
     line-height: 1;
     cursor: pointer;
 }
+.container:has(> .results) {
+    max-width: 1300px;
+}
 
 .split-controls button:disabled { opacity: 0.35; cursor: not-allowed; }
 .split-count { min-width: 1.5rem; text-align: center; font-weight: 600; }
@@ -493,7 +496,7 @@ html {
 .result-img-wrap {
     position: relative;
     flex: 0 0 45%;
-    min-height: 180px;  
+    min-height: 250px;  
     overflow: hidden;
 }
 
